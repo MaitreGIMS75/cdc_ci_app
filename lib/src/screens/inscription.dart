@@ -1,11 +1,15 @@
+import 'dart:convert';
 import 'dart:io';
+import 'dart:js';
 
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:http/http.dart' as http;
+import 'login.dart';
 
 import '../constants/images_strings.dart';
+import 'inscription_reussie.dart';
 
 class Inscription extends StatefulWidget {
   const Inscription({super.key});
@@ -29,7 +33,6 @@ class _InscriptionState extends State<Inscription> {
   TextEditingController CityController = TextEditingController();
   TextEditingController CountryController = TextEditingController();
   TextEditingController NationalityController = TextEditingController();
-
 
   Future getImage() async {
     final image = await ImagePicker().pickImage(source: ImageSource.gallery);
@@ -295,6 +298,93 @@ class _InscriptionState extends State<Inscription> {
       ),
     );
   }
+
+  Future<void> createSubscription(String login, String password) async {
+    Map<String, String> requestHeaders = {
+      'Content-type': 'application/json',
+      'Authorization': 'Bearer $token',
+    };
+
+    if (NameController.text.isNotEmpty && SurnameController.text.isNotEmpty && dateInput.text.isNotEmpty && NationalityController.text.isNotEmpty && BirthPlaceController.text.isNotEmpty && EmailController.text.isNotEmpty && PhoneNumberController.text.isNotEmpty && CountryController.text.isNotEmpty && CityController.text.isNotEmpty) {
+      var response = await http.post(
+        Uri.parse('http://154.73.102.36:8121/api/v1/subscription-transactions'),
+        body: jsonEncode(
+          {
+            "params": {
+              "tag": "T001",
+              "subscriber": {
+                "first_name": NameController.text,
+                "last_name": SurnameController.text,
+                "sex": "male",
+                "birth_date": dateInput.text,
+                "native_country": NationalityController.text,
+                "birth_city": BirthPlaceController.text,
+                "email_adress": EmailController.text,
+                "mobile_phone": PhoneNumberController.text,
+                "country_of_residence": CountryController.text,
+                "town_of_residence": CityController.text,
+                "street_of_residence": "IUYTU",
+                "income_level": 6,
+                "identification_number_type": 1,
+                "identification_number": "OIUYTERTYIUOCI"
+              },
+              "subscription": {
+                "compartment": 4,
+                "payment_type": "Périodique",
+                "periodicity": "Mensuelle",
+                "commitment_amount": "700000",
+                "exit_choice": "capital"
+              },
+              "attachments": [
+                {"type": "identity-justification", "etag": "A001"},
+                {"type": "residence-justification", "etag": "A002"},
+                {"type": "expatriation-justification", "etag": "A003"}
+              ]
+            }
+          },
+        ),
+        headers: requestHeaders,
+      );
+      if (response.statusCode == 201) {
+        final tag = json.decode(response.body)['result']['data']['tag'];
+        print("Response Status: ${response.statusCode}");
+        print('Response Body: ${json.decode(response.body)}');
+        //print('Login token : $token ');
+        Navigator.push(
+          context as BuildContext,
+          MaterialPageRoute(builder: (context) => InscriptionReussie()),
+        );
+      } else {
+        ScaffoldMessenger.of(context as BuildContext).showSnackBar(
+          SnackBar(
+            content: Text("Invalid Information"),
+          ),
+        );
+      }
+    } else {
+      ScaffoldMessenger.of(context as BuildContext).showSnackBar(
+        SnackBar(
+          content: Text("Blank Field Not Allow"),
+        ),
+      );
+    }
+  }
+
+   Future<void> _uploadImage() async {
+  final url = 'https://example.com/upload';
+  var request = http.MultipartRequest('PUT', Uri.parse(url));
+  if (_image != null) {
+      request.files.add(http.MultipartFile.fromBytes('image', _image?.readAsBytes() as List<int>));
+  }
+  var response = await request.send();
+  if (response.statusCode == 200) {
+    print('Image uploaded successfully');
+  } else {
+    print('Error while uploading image: ${response.reasonPhrase}');
+  }
+}
+
+  
 }
 
 Widget CustomButton({
@@ -330,48 +420,4 @@ Widget CustomButton({
       ),
     ),
   );
-}
-
-Future<void> login(String login, String password) async {
-    Map<String, String> requestHeaders = {
-      'Content-type': 'application/json',
-    };
-
-    if (passwordController.text.isNotEmpty && loginController.text.isNotEmpty) {
-      var response = await http.post(
-        Uri.parse('http://154.73.102.36:8121/api/v1/login'),
-        body: jsonEncode(
-          {
-            'params': {
-              'login': loginController.text,
-              'password': passwordController.text,
-            }
-          },
-        ),
-        headers: requestHeaders,
-      );
-      if (response.statusCode == 200) {
-        //final token = json.decode(response.body)['result']['data']['token'];
-        print("Response Status: ${response.statusCode}");
-        print('Response Body: ${json.decode(response.body)}');
-        //print('Login token : $token ');
-        Navigator.push(
-          context,
-          MaterialPageRoute(builder: (context) => Accueil()),
-        );
-      } else {
-        ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(
-            content: Text("Invalid Credentials"),
-          ),
-        );
-      }
-    } else {
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(
-          content: Text("Blank Field Not Allow"),
-        ),
-      );
-    }
-  }
 }

@@ -12,10 +12,10 @@ class Login extends StatefulWidget {
   @override
   State<Login> createState() => _LoginState();
 }
-
 class _LoginState extends State<Login> {
   TextEditingController loginController = TextEditingController();
   TextEditingController passwordController = TextEditingController();
+  String token = "";
 
   @override
   Widget build(BuildContext context) {
@@ -147,7 +147,8 @@ class _LoginState extends State<Login> {
         headers: requestHeaders,
       );
       if (response.statusCode == 200) {
-        //final token = json.decode(response.body)['result']['data']['token'];
+        
+        token = json.decode(response.body)['result']['data']['token'];
         print("Response Status: ${response.statusCode}");
         print('Response Body: ${json.decode(response.body)}');
         //print('Login token : $token ');
