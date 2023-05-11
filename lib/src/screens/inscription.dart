@@ -3,6 +3,7 @@ import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:http/http.dart' as http;
 
 import '../constants/images_strings.dart';
 
@@ -16,6 +17,19 @@ class Inscription extends StatefulWidget {
 class _InscriptionState extends State<Inscription> {
   TextEditingController dateInput = TextEditingController();
   File? _image;
+  TextEditingController NameController = TextEditingController();
+  TextEditingController SurnameController = TextEditingController();
+  TextEditingController BirthPlaceController = TextEditingController();
+  TextEditingController BirthDateController = TextEditingController();
+  TextEditingController PhoneNumberController = TextEditingController();
+  TextEditingController EmailController = TextEditingController();
+  TextEditingController PasswordController = TextEditingController();
+  TextEditingController ConfirmPasswordController = TextEditingController();
+  TextEditingController AddressController = TextEditingController();
+  TextEditingController CityController = TextEditingController();
+  TextEditingController CountryController = TextEditingController();
+  TextEditingController NationalityController = TextEditingController();
+
 
   Future getImage() async {
     final image = await ImagePicker().pickImage(source: ImageSource.gallery);
@@ -61,7 +75,9 @@ class _InscriptionState extends State<Inscription> {
             SizedBox(
               height: 30,
             ),
+            //Nom
             TextFormField(
+              controller: NameController,
               decoration: InputDecoration(
                 labelText: 'Nom',
                 prefixIcon: Icon(
@@ -73,7 +89,9 @@ class _InscriptionState extends State<Inscription> {
             SizedBox(
               height: 20,
             ),
+            //Prénoms
             TextFormField(
+              controller: SurnameController,
               decoration: InputDecoration(
                 labelText: 'Prénoms',
                 prefixIcon: Icon(
@@ -85,7 +103,9 @@ class _InscriptionState extends State<Inscription> {
             SizedBox(
               height: 20,
             ),
+            //Lieu de Naissance
             TextFormField(
+              controller: BirthDateController,
               decoration: InputDecoration(
                   labelText: 'Lieu de Naissance',
                   prefixIcon: Icon(
@@ -96,6 +116,7 @@ class _InscriptionState extends State<Inscription> {
             SizedBox(
               height: 20,
             ),
+            //Date de naissance
             TextFormField(
               controller: dateInput,
               decoration: InputDecoration(
@@ -129,7 +150,9 @@ class _InscriptionState extends State<Inscription> {
             SizedBox(
               height: 20,
             ),
+            //Nationalité
             TextFormField(
+              controller: NationalityController,
               decoration: InputDecoration(
                   labelText: 'Nationalité',
                   prefixIcon: Icon(
@@ -157,6 +180,7 @@ class _InscriptionState extends State<Inscription> {
               height: 20,
             ),
             TextFormField(
+              controller: EmailController,
               decoration: InputDecoration(
                   labelText: 'Email',
                   prefixIcon: Icon(
@@ -164,10 +188,12 @@ class _InscriptionState extends State<Inscription> {
                   ),
                   border: OutlineInputBorder()),
             ),
+            //Mot de passe
             SizedBox(
               height: 20,
             ),
             TextFormField(
+              controller: PasswordController,
               decoration: InputDecoration(
                   labelText: 'Mot de passe',
                   prefixIcon: Icon(
@@ -175,10 +201,12 @@ class _InscriptionState extends State<Inscription> {
                   ),
                   border: OutlineInputBorder()),
             ),
+            //Confirmation du Mot de passe
             SizedBox(
               height: 20,
             ),
             TextFormField(
+              controller: ConfirmPasswordController,
               decoration: InputDecoration(
                   labelText: 'Confirmation du mot de passe',
                   prefixIcon: Icon(
@@ -189,7 +217,9 @@ class _InscriptionState extends State<Inscription> {
             SizedBox(
               height: 20,
             ),
+            //Telephone
             TextFormField(
+              controller: PhoneNumberController,
               decoration: InputDecoration(
                   labelText: 'Téléphone',
                   prefixIcon: Icon(
@@ -200,7 +230,9 @@ class _InscriptionState extends State<Inscription> {
             SizedBox(
               height: 20,
             ),
+            //Pays
             TextFormField(
+              controller: CountryController,
               decoration: InputDecoration(
                   labelText: 'Pays de résidence',
                   prefixIcon: Icon(
@@ -211,7 +243,9 @@ class _InscriptionState extends State<Inscription> {
             SizedBox(
               height: 20,
             ),
+            //Ville
             TextFormField(
+              controller: CityController,
               decoration: InputDecoration(
                   labelText: 'Ville',
                   prefixIcon: Icon(
@@ -222,7 +256,9 @@ class _InscriptionState extends State<Inscription> {
             SizedBox(
               height: 20,
             ),
+            //Adresse
             TextFormField(
+              controller: CityController,
               decoration: InputDecoration(
                   labelText: 'Adresse',
                   prefixIcon: Icon(
@@ -233,6 +269,7 @@ class _InscriptionState extends State<Inscription> {
             SizedBox(
               height: 50,
             ),
+            //Bouton Envoyer
             ElevatedButton(
               onPressed: () {},
               child: Text('Validez'),
@@ -293,4 +330,48 @@ Widget CustomButton({
       ),
     ),
   );
+}
+
+Future<void> login(String login, String password) async {
+    Map<String, String> requestHeaders = {
+      'Content-type': 'application/json',
+    };
+
+    if (passwordController.text.isNotEmpty && loginController.text.isNotEmpty) {
+      var response = await http.post(
+        Uri.parse('http://154.73.102.36:8121/api/v1/login'),
+        body: jsonEncode(
+          {
+            'params': {
+              'login': loginController.text,
+              'password': passwordController.text,
+            }
+          },
+        ),
+        headers: requestHeaders,
+      );
+      if (response.statusCode == 200) {
+        //final token = json.decode(response.body)['result']['data']['token'];
+        print("Response Status: ${response.statusCode}");
+        print('Response Body: ${json.decode(response.body)}');
+        //print('Login token : $token ');
+        Navigator.push(
+          context,
+          MaterialPageRoute(builder: (context) => Accueil()),
+        );
+      } else {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            content: Text("Invalid Credentials"),
+          ),
+        );
+      }
+    } else {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Text("Blank Field Not Allow"),
+        ),
+      );
+    }
+  }
 }
