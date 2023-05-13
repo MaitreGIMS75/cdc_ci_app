@@ -5,6 +5,7 @@ import 'package:intl/intl.dart';
 import 'package:image_picker/image_picker.dart';
 
 import '../constants/images_strings.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class Inscription extends StatefulWidget {
   const Inscription({super.key});
@@ -27,6 +28,13 @@ class _InscriptionState extends State<Inscription> {
     setState(() {
       this._image = imageTemporary;
     });
+  }
+
+  Future<String?> getToken() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    String? token = prefs.getString('token');
+    //return token;
+    print(token);
   }
 
   @override
@@ -234,7 +242,9 @@ class _InscriptionState extends State<Inscription> {
               height: 50,
             ),
             ElevatedButton(
-              onPressed: () {},
+              onPressed: () {
+                getToken();
+              },
               child: Text('Validez'),
               style: ElevatedButton.styleFrom(
                 shape: StadiumBorder(),

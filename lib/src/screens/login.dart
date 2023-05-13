@@ -1,10 +1,13 @@
 import 'dart:convert';
 
-import 'package:cdc_ci_app/src/screens/acceuil.dart';
+//import 'package:cdc_ci_app/src/screens/acceuil.dart';
+import 'package:cdc_ci_app/src/screens/souscription.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 
 import '../constants/images_strings.dart';
+
+import 'package:shared_preferences/shared_preferences.dart';
 
 class Login extends StatefulWidget {
   const Login({super.key});
@@ -150,10 +153,11 @@ class _LoginState extends State<Login> {
         //final token = json.decode(response.body)['result']['data']['token'];
         print("Response Status: ${response.statusCode}");
         print('Response Body: ${json.decode(response.body)}');
+        saveToken(response);
         //print('Login token : $token ');
         Navigator.push(
           context,
-          MaterialPageRoute(builder: (context) => Accueil()),
+          MaterialPageRoute(builder: (context) => Souscription()),
         );
       } else {
         ScaffoldMessenger.of(context).showSnackBar(
@@ -169,5 +173,11 @@ class _LoginState extends State<Login> {
         ),
       );
     }
+  }
+
+  void saveToken(var response) async {
+    SharedPreferences pref = await SharedPreferences.getInstance();
+    pref.setString(
+        'token', json.decode(response.body)['result']['data']['token']);
   }
 }
