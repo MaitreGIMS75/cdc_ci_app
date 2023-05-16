@@ -155,11 +155,11 @@ while(i < 4){
     }
 
     i+=2;
-    var response = await request.send();
     if(i==3){
       checkedfiles=true;
     }
 
+    var response = await request.send();
     if (response.statusCode == 201 && checkedfiles == true) {
       print('File uploaded successfully');
       Navigator.push(
