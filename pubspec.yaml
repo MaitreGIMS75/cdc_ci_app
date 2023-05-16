@@ -44,6 +44,7 @@ dependencies:
   cupertino_icons: ^1.0.2
   http: ^0.13.6
   file_picker: ^5.3.0
+  multi_file_picker: ^0.0.6
   #flutter_native_splash: ^2.2.18
 
 dev_dependencies:

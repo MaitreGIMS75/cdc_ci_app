@@ -232,6 +232,14 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "1.8.0"
+  multi_file_picker:
+    dependency: "direct main"
+    description:
+      name: multi_file_picker
+      sha256: "12d6f19785d117c38aec4d05b12cb8a13964b0b3df4d11fc4b9dc5fcfa8fceaa"
+      url: "https://pub.dev"
+    source: hosted
+    version: "0.0.6"
   path:
     dependency: transitive
     description:

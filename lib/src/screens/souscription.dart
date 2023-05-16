@@ -1,10 +1,15 @@
 import 'dart:convert';
+import 'dart:html';
 
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:http/http.dart' as http;
 import 'package:intl/intl.dart';
+import 'package:path/path.dart' as path;
 import 'package:file_picker/file_picker.dart';
+import 'package:multi_file_picker/multi_file_picker.dart';
+
+import 'inscription_reussie.dart';
 
 class Souscription extends StatefulWidget {
   const Souscription({Key? key}) : super(key: key);
@@ -14,8 +19,6 @@ class Souscription extends StatefulWidget {
 }
 
 class _SouscriptionState extends State<Souscription> {
-  final _formKey = GlobalKey<FormState>();
-  int _currentStep = 0;
 
   List<dynamic> countries = [];
   //int _value = 1;
@@ -55,6 +58,10 @@ class _SouscriptionState extends State<Souscription> {
   final commitmentAmountController = TextEditingController();
   final exitChoiceController = TextEditingController();
 
+   List<String?> fileNames = [];
+  List<String?> _selectedFiles = [];
+
+
   @override
   void initState() {
     super.initState();
@@ -66,16 +73,20 @@ class _SouscriptionState extends State<Souscription> {
   }
 
   void _openFilePicker() async {
-    try {
-      FilePickerResult? result = await FilePicker.platform.pickFiles();
-      if (result != null) {
-        setState(() {
-          final _fileName = result.files.single.name;
-          final _filePath = result.files.single.path;
-        });
-      }
-    } catch (e) {
-      print('Error while picking the file: $e');
+    final result = await FilePicker.platform.pickFiles(
+      type: FileType.any,
+      allowMultiple: true,
+    );
+
+    if (result != null) {
+      setState(() {
+        _selectedFiles = result.paths;
+      });
+    }
+
+    for (var file in _selectedFiles) {
+      var fileName = path.basename(file!);
+      fileNames.add(fileName);
     }
   }
 
@@ -124,6 +135,32 @@ class _SouscriptionState extends State<Souscription> {
       incomes = recordsthree;
     });
   }
+
+  Future<void> uploadFiles(List<String> filePaths) async {
+  for (var file in fileNames){
+    
+  }
+  var request = http.MultipartRequest(
+    'PUT',
+    Uri.parse('api/v1/subscription-transactions/<int:id>/attachments/<string:type>/<string:etag>'),
+  );
+
+  for (var path in filePaths) {
+    var file = await http.MultipartFile.fromPath('files[]', path);
+    request.files.add(file);
+  }
+
+  var response = await request.send();
+  if (response.statusCode == 201) {
+    print('Files uploaded successfully');
+     Navigator.push(
+          context,
+          MaterialPageRoute(builder: (context) => InscriptionReussie()),
+        );
+  } else {
+    print('Error uploading files');
+  }
+}
 
   getIdentifications() async {
     String? token = await getToken();
@@ -208,15 +245,12 @@ class _SouscriptionState extends State<Souscription> {
         ),
         headers: requestHeaders,
       );
-      if (response.statusCode == 200) {
+      if (response.statusCode == 201) {
     
         print("Response Status: ${response.statusCode}");
         print('Response Body: ${json.decode(response.body)}');
       
-        Navigator.push(
-          context,
-          MaterialPageRoute(builder: (context) => Souscription()),
-        );
+       
       } else {
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(
@@ -622,54 +656,17 @@ class _SouscriptionState extends State<Souscription> {
               ),
             ),
 
-            ElevatedButton(
-              onPressed: () {
-                _openFilePicker();
-              },
-              child: Text('Fichier Identification'),
-              style: ElevatedButton.styleFrom(
-                shape: StadiumBorder(),
-                backgroundColor: Color(0xFF2E7742),
-                padding: EdgeInsets.all(20),
-                fixedSize: Size(200, 60),
-                textStyle: TextStyle(
-                  fontSize: 20,
-                  fontFamily: 'Quicksand',
-                  fontWeight: FontWeight.bold,
-                ),
-                onPrimary: Colors.white,
-                elevation: 5,
-              ),
+ SizedBox(
+              height: 15,
             ),
-
             ElevatedButton(
               onPressed: () {
                 _openFilePicker();
               },
-              child: Text('Fichier Residence'),
+              child: Text('Choissisez des fichiers'),
               style: ElevatedButton.styleFrom(
                 shape: StadiumBorder(),
-                backgroundColor: Color(0xFF2E7742),
-                padding: EdgeInsets.all(20),
-                fixedSize: Size(200, 60),
-                textStyle: TextStyle(
-                  fontSize: 20,
-                  fontFamily: 'Quicksand',
-                  fontWeight: FontWeight.bold,
-                ),
-                onPrimary: Colors.white,
-                elevation: 5,
-              ),
-            ),
-
-            ElevatedButton(
-              onPressed: () {
-                _openFilePicker();
-              },
-              child: Text('Fichier Expatriation'),
-              style: ElevatedButton.styleFrom(
-                shape: StadiumBorder(),
-                backgroundColor: Color(0xFF2E7742),
+                backgroundColor: Color(0xFFF28D31),
                 padding: EdgeInsets.all(20),
                 fixedSize: Size(200, 60),
                 textStyle: TextStyle(
