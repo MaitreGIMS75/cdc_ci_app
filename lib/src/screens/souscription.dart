@@ -19,7 +19,6 @@ class Souscription extends StatefulWidget {
 }
 
 class _SouscriptionState extends State<Souscription> {
-
   List<dynamic> countries = [];
   //int _value = 1;
   int? _valueCountrie;
@@ -58,9 +57,10 @@ class _SouscriptionState extends State<Souscription> {
   final commitmentAmountController = TextEditingController();
   final exitChoiceController = TextEditingController();
 
-   List<String?> fileNames = [];
+  List<String?> fileNames = [];
   List<String?> _selectedFiles = [];
 
+  String etag = "A00";
 
   @override
   void initState() {
@@ -70,24 +70,6 @@ class _SouscriptionState extends State<Souscription> {
     getIncomes();
     getIdentifications();
     getCompartments();
-  }
-
-  void _openFilePicker() async {
-    final result = await FilePicker.platform.pickFiles(
-      type: FileType.any,
-      allowMultiple: true,
-    );
-
-    if (result != null) {
-      setState(() {
-        _selectedFiles = result.paths;
-      });
-    }
-
-    for (var file in _selectedFiles) {
-      var fileName = path.basename(file!);
-      fileNames.add(fileName);
-    }
   }
 
   getData() async {
@@ -136,31 +118,55 @@ class _SouscriptionState extends State<Souscription> {
     });
   }
 
-  Future<void> uploadFiles(List<String> filePaths) async {
-  for (var file in fileNames){
+  Future<void> uploadFiles(List<String?> filePaths, String id) async {
+    int i = 1;
+    bool checkedfiles = false;
+    String type = "";
+while(i < 4){
+    etag = "AOO$i";
+    if(i==1){
+        type = "identity-justification";
+    }
+    else if(i==2){
+        type = "residence-justification";
+    }
+    else if(i==3){
+        type = "expatriation-justification";
+    }
+     var request = http.MultipartRequest(
+      'PUT',
+      Uri.parse(
+          'http://154.73.102.36:8121/api/v1/subscription-transactions/$id/attachments/$type/$etag'),
+    );
+
+    i-=1;
     
-  }
-  var request = http.MultipartRequest(
-    'PUT',
-    Uri.parse('api/v1/subscription-transactions/<int:id>/attachments/<string:type>/<string:etag>'),
-  );
+    for (var path in filePaths) {
+      var file = await http.MultipartFile.fromPath('files[$i]', path!);
+      request.files.add(file);
+    }
 
-  for (var path in filePaths) {
-    var file = await http.MultipartFile.fromPath('files[]', path);
-    request.files.add(file);
-  }
+    i+=2;
+    var response = await request.send();
+    if(i==3){
+      checkedfiles=true;
+    }
 
-  var response = await request.send();
-  if (response.statusCode == 201) {
-    print('Files uploaded successfully');
-     Navigator.push(
-          context,
-          MaterialPageRoute(builder: (context) => InscriptionReussie()),
-        );
-  } else {
-    print('Error uploading files');
-  }
+    if (response.statusCode == 201 && checkedfiles == true) {
+      print('File uploaded successfully');
+      Navigator.push(
+        context,
+        MaterialPageRoute(builder: (context) => InscriptionReussie()),
+      );
+    } else {
+      print('Error uploading file');
+    }
 }
+      
+      
+}
+   
+  
 
   getIdentifications() async {
     String? token = await getToken();
@@ -192,6 +198,21 @@ class _SouscriptionState extends State<Souscription> {
     });
   }
 
+  void _openFilePicker() async {
+    final result = await FilePicker.platform.pickFiles(
+      type: FileType.any,
+      allowMultiple: true,
+    );
+
+    if (result != null) {
+      setState(() {
+        _selectedFiles = result.paths;
+      });
+    }
+
+    
+  }
+
   Future<String?> getToken() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     String? token = prefs.getString('token');
@@ -205,7 +226,18 @@ class _SouscriptionState extends State<Souscription> {
       'Authorization': 'Bearer $token',
     };
 
-    if (firstNameController.text.isNotEmpty && lastNameController.text.isNotEmpty && dateInput.text.isNotEmpty && emailAdressController.text.isNotEmpty  && mobilePhoneController.text.isNotEmpty  && countryOfResidenceController.text.isNotEmpty && townOfResidenceController.text.isNotEmpty && streetOfResidenceController.text.isNotEmpty && paymentTypeController.text.isNotEmpty && periodicityController.text.isNotEmpty && commitmentAmountController.text.isNotEmpty && exitChoiceController.text.isNotEmpty) {
+    if (firstNameController.text.isNotEmpty &&
+        lastNameController.text.isNotEmpty &&
+        dateInput.text.isNotEmpty &&
+        emailAdressController.text.isNotEmpty &&
+        mobilePhoneController.text.isNotEmpty &&
+        countryOfResidenceController.text.isNotEmpty &&
+        townOfResidenceController.text.isNotEmpty &&
+        streetOfResidenceController.text.isNotEmpty &&
+        paymentTypeController.text.isNotEmpty &&
+        periodicityController.text.isNotEmpty &&
+        commitmentAmountController.text.isNotEmpty &&
+        exitChoiceController.text.isNotEmpty) {
       var response = await http.post(
         Uri.parse('http://154.73.102.36:8121/api/v1/subscription-transactions'),
         body: jsonEncode(
@@ -222,7 +254,7 @@ class _SouscriptionState extends State<Souscription> {
                 "email_adress": emailAdressController.text,
                 "mobile_phone": mobilePhoneController.text,
                 "country_of_residence": countryOfResidenceController.text,
-                "town_of_residence":townOfResidenceController.text,
+                "town_of_residence": townOfResidenceController.text,
                 "street_of_residence": streetOfResidenceController.text,
                 "income_level": _valueIncome,
                 "identification_number_type": _valueIdentification,
@@ -246,11 +278,13 @@ class _SouscriptionState extends State<Souscription> {
         headers: requestHeaders,
       );
       if (response.statusCode == 201) {
-    
+
         print("Response Status: ${response.statusCode}");
         print('Response Body: ${json.decode(response.body)}');
-      
-       
+        String id = jsonDecode(response.body)['id'];
+
+         uploadFiles(_selectedFiles, id);
+
       } else {
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(
@@ -278,7 +312,7 @@ class _SouscriptionState extends State<Souscription> {
         padding: EdgeInsets.all(20.0),
         child: ListView(
           children: [
-            Center(
+           const Center(
               child: Text(
                 'Informations of subscriber',
                 style: TextStyle(
@@ -288,12 +322,12 @@ class _SouscriptionState extends State<Souscription> {
                 ),
               ),
             ),
-            SizedBox(
+          const  SizedBox(
               height: 15,
             ),
             TextFormField(
               controller: firstNameController,
-              decoration: InputDecoration(
+              decoration:const InputDecoration(
                 labelText: 'First Name',
                 prefixIcon: Icon(
                   Icons.verified_user_outlined,
@@ -301,12 +335,12 @@ class _SouscriptionState extends State<Souscription> {
                 border: OutlineInputBorder(),
               ),
             ),
-            SizedBox(
+          const  SizedBox(
               height: 15,
             ),
             TextFormField(
               controller: lastNameController,
-              decoration: InputDecoration(
+              decoration:const InputDecoration(
                 labelText: 'Last Name',
                 prefixIcon: Icon(
                   Icons.verified_user_outlined,
@@ -656,7 +690,7 @@ class _SouscriptionState extends State<Souscription> {
               ),
             ),
 
- SizedBox(
+            SizedBox(
               height: 15,
             ),
             ElevatedButton(
