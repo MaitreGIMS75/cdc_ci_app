@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:http/http.dart' as http;
 import 'package:intl/intl.dart';
+import 'package:file_picker/file_picker.dart';
 
 class Souscription extends StatefulWidget {
   const Souscription({Key? key}) : super(key: key);
@@ -13,6 +14,9 @@ class Souscription extends StatefulWidget {
 }
 
 class _SouscriptionState extends State<Souscription> {
+  final _formKey = GlobalKey<FormState>();
+  int _currentStep = 0;
+
   List<dynamic> countries = [];
   //int _value = 1;
   int? _valueCountrie;
@@ -59,6 +63,20 @@ class _SouscriptionState extends State<Souscription> {
     getIncomes();
     getIdentifications();
     getCompartments();
+  }
+
+  void _openFilePicker() async {
+    try {
+      FilePickerResult? result = await FilePicker.platform.pickFiles();
+      if (result != null) {
+        setState(() {
+          final _fileName = result.files.single.name;
+          final _filePath = result.files.single.path;
+        });
+      }
+    } catch (e) {
+      print('Error while picking the file: $e');
+    }
   }
 
   getData() async {
@@ -141,6 +159,78 @@ class _SouscriptionState extends State<Souscription> {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     String? token = prefs.getString('token');
     return token;
+  }
+
+  Future<void> CreerSouscription(String login, String password) async {
+    String? token = await getToken();
+    Map<String, String> requestHeaders = {
+      'Content-type': 'application/json',
+      'Authorization': 'Bearer $token',
+    };
+
+    if (firstNameController.text.isNotEmpty && lastNameController.text.isNotEmpty && dateInput.text.isNotEmpty && emailAdressController.text.isNotEmpty  && mobilePhoneController.text.isNotEmpty  && countryOfResidenceController.text.isNotEmpty && townOfResidenceController.text.isNotEmpty && streetOfResidenceController.text.isNotEmpty && paymentTypeController.text.isNotEmpty && periodicityController.text.isNotEmpty && commitmentAmountController.text.isNotEmpty && exitChoiceController.text.isNotEmpty) {
+      var response = await http.post(
+        Uri.parse('http://154.73.102.36:8121/api/v1/subscription-transactions'),
+        body: jsonEncode(
+          {
+            "params": {
+              "tag": "T001",
+              "subscriber": {
+                "first_name": firstNameController.text,
+                "last_name": lastNameController.text,
+                "sex": "male",
+                "birth_date": dateInput.text,
+                "native_country": _valueCountrie,
+                "birth_city": _valueCity,
+                "email_adress": emailAdressController.text,
+                "mobile_phone": mobilePhoneController.text,
+                "country_of_residence": countryOfResidenceController.text,
+                "town_of_residence":townOfResidenceController.text,
+                "street_of_residence": streetOfResidenceController.text,
+                "income_level": _valueIncome,
+                "identification_number_type": _valueIdentification,
+                "identification_number": "OIUYTERTYIUOCI"
+              },
+              "subscription": {
+                "compartment": _valueCompartment,
+                "payment_type": paymentTypeController.text,
+                "periodicity": periodicityController.text,
+                "commitment_amount": commitmentAmountController.text,
+                "exit_choice": exitChoiceController.text
+              },
+              "attachments": [
+                {"type": "identity-justification", "etag": "A001"},
+                {"type": "residence-justification", "etag": "A002"},
+                {"type": "expatriation-justification", "etag": "A003"}
+              ]
+            }
+          },
+        ),
+        headers: requestHeaders,
+      );
+      if (response.statusCode == 200) {
+    
+        print("Response Status: ${response.statusCode}");
+        print('Response Body: ${json.decode(response.body)}');
+      
+        Navigator.push(
+          context,
+          MaterialPageRoute(builder: (context) => Souscription()),
+        );
+      } else {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            content: Text("Invalid Informations"),
+          ),
+        );
+      }
+    } else {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Text("Blank Field Not Allow"),
+        ),
+      );
+    }
   }
 
   @override
@@ -529,6 +619,66 @@ class _SouscriptionState extends State<Souscription> {
                   Icons.verified_user_outlined,
                 ),
                 border: OutlineInputBorder(),
+              ),
+            ),
+
+            ElevatedButton(
+              onPressed: () {
+                _openFilePicker();
+              },
+              child: Text('Fichier Identification'),
+              style: ElevatedButton.styleFrom(
+                shape: StadiumBorder(),
+                backgroundColor: Color(0xFF2E7742),
+                padding: EdgeInsets.all(20),
+                fixedSize: Size(200, 60),
+                textStyle: TextStyle(
+                  fontSize: 20,
+                  fontFamily: 'Quicksand',
+                  fontWeight: FontWeight.bold,
+                ),
+                onPrimary: Colors.white,
+                elevation: 5,
+              ),
+            ),
+
+            ElevatedButton(
+              onPressed: () {
+                _openFilePicker();
+              },
+              child: Text('Fichier Residence'),
+              style: ElevatedButton.styleFrom(
+                shape: StadiumBorder(),
+                backgroundColor: Color(0xFF2E7742),
+                padding: EdgeInsets.all(20),
+                fixedSize: Size(200, 60),
+                textStyle: TextStyle(
+                  fontSize: 20,
+                  fontFamily: 'Quicksand',
+                  fontWeight: FontWeight.bold,
+                ),
+                onPrimary: Colors.white,
+                elevation: 5,
+              ),
+            ),
+
+            ElevatedButton(
+              onPressed: () {
+                _openFilePicker();
+              },
+              child: Text('Fichier Expatriation'),
+              style: ElevatedButton.styleFrom(
+                shape: StadiumBorder(),
+                backgroundColor: Color(0xFF2E7742),
+                padding: EdgeInsets.all(20),
+                fixedSize: Size(200, 60),
+                textStyle: TextStyle(
+                  fontSize: 20,
+                  fontFamily: 'Quicksand',
+                  fontWeight: FontWeight.bold,
+                ),
+                onPrimary: Colors.white,
+                elevation: 5,
               ),
             ),
 
