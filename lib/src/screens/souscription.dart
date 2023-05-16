@@ -119,6 +119,12 @@ class _SouscriptionState extends State<Souscription> {
   }
 
   Future<void> uploadFiles(List<String?> filePaths, String id) async {
+    String? token = await getToken();
+    Map<String, String> requestHeaders = {
+      'Content-type': 'multipart/form-data',
+      'Authorization': 'Bearer $token',
+    };
+
     int i = 1;
     bool checkedfiles = false;
     String type = "";
@@ -135,10 +141,12 @@ while(i < 4){
     }
      var request = http.MultipartRequest(
       'PUT',
+     
       Uri.parse(
           'http://154.73.102.36:8121/api/v1/subscription-transactions/$id/attachments/$type/$etag'),
     );
 
+    request.headers.addAll(requestHeaders);
     i-=1;
     
     for (var path in filePaths) {
@@ -219,7 +227,7 @@ while(i < 4){
     return token;
   }
 
-  Future<void> CreerSouscription(String login, String password) async {
+  Future<void> CreerSouscription() async {
     String? token = await getToken();
     Map<String, String> requestHeaders = {
       'Content-type': 'application/json',
@@ -719,6 +727,7 @@ while(i < 4){
             ElevatedButton(
               onPressed: () {
                 getToken();
+                CreerSouscription();
               },
               child: Text('Continuez'),
               style: ElevatedButton.styleFrom(
