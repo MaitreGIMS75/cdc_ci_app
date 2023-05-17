@@ -150,7 +150,7 @@ while(i < 4){
     i-=1;
     
     for (var path in filePaths) {
-      var file = await http.MultipartFile.fromPath('files[$i]', path!);
+      var file = await http.MultipartFile.fromPath('_selectedfiles[$i]', path!);
       request.files.add(file);
     }
 
@@ -166,7 +166,7 @@ while(i < 4){
         context,
         MaterialPageRoute(builder: (context) => InscriptionReussie()),
       );
-    } else {
+    } else if(response.statusCode != 201){
       print('Error uploading file');
     }
 }
