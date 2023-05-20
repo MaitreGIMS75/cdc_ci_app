@@ -1,13 +1,14 @@
 import 'dart:convert';
-import 'dart:html';
+import 'dart:io';
 
+import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:http/http.dart' as http;
 import 'package:intl/intl.dart';
-import 'package:path/path.dart' as path;
 import 'package:file_picker/file_picker.dart';
-import 'package:multi_file_picker/multi_file_picker.dart';
+import 'package:uuid/uuid.dart';
+
 
 import 'inscription_reussie.dart';
 
@@ -25,7 +26,7 @@ class _SouscriptionState extends State<Souscription> {
 
   List<dynamic> cities = [];
   int? _valueCity;
-
+  int? _valueCountryOfResidence;
   List<dynamic> incomes = [];
   int? _valueIncome;
 
@@ -70,6 +71,7 @@ class _SouscriptionState extends State<Souscription> {
     getIncomes();
     getIdentifications();
     getCompartments();
+
   }
 
   getData() async {
@@ -141,7 +143,6 @@ while(i < 4){
     }
      var request = http.MultipartRequest(
       'PUT',
-     
       Uri.parse(
           'http://154.73.102.36:8121/api/v1/subscription-transactions/$id/attachments/$type/$etag'),
     );
@@ -239,7 +240,6 @@ while(i < 4){
         dateInput.text.isNotEmpty &&
         emailAdressController.text.isNotEmpty &&
         mobilePhoneController.text.isNotEmpty &&
-        countryOfResidenceController.text.isNotEmpty &&
         townOfResidenceController.text.isNotEmpty &&
         streetOfResidenceController.text.isNotEmpty &&
         paymentTypeController.text.isNotEmpty &&
@@ -251,7 +251,7 @@ while(i < 4){
         body: jsonEncode(
           {
             "params": {
-              "tag": "T001",
+              "tag": const Uuid().v4(),
               "subscriber": {
                 "first_name": firstNameController.text,
                 "last_name": lastNameController.text,
@@ -261,7 +261,7 @@ while(i < 4){
                 "birth_city": _valueCity,
                 "email_adress": emailAdressController.text,
                 "mobile_phone": mobilePhoneController.text,
-                "country_of_residence": countryOfResidenceController.text,
+                "country_of_residence": _valueCountryOfResidence,
                 "town_of_residence": townOfResidenceController.text,
                 "street_of_residence": streetOfResidenceController.text,
                 "income_level": _valueIncome,
@@ -276,23 +276,43 @@ while(i < 4){
                 "exit_choice": exitChoiceController.text
               },
               "attachments": [
-                {"type": "identity-justification", "etag": "A001"},
-                {"type": "residence-justification", "etag": "A002"},
-                {"type": "expatriation-justification", "etag": "A003"}
+                {"type": "identity-justification", "etag": const Uuid().v4()},
+                {"type": "residence-justification", "etag": const Uuid().v4()},
+                {"type": "expatriation-justification", "etag": const Uuid().v4()}
               ]
             }
           },
         ),
         headers: requestHeaders,
       );
-      if (response.statusCode == 201) {
 
-        print("Response Status: ${response.statusCode}");
-        print('Response Body: ${json.decode(response.body)}');
-        String id = jsonDecode(response.body)['id'];
+      final resultData = json.decode(response.body);
+      if (resultData["result"]["status"] == 201) {
+        print(resultData["result"]["data"]["attachments"]);
+        final attachments = resultData["result"]["data"]["attachments"] as List<dynamic>;
+        List<Future> uploadRequests = [];
+        int fileIndex = 0;
+        for (var element in attachments) {
+          FormData formData = FormData.fromMap({
+            'ufile': await MultipartFile.fromFile(_selectedFiles[fileIndex]!, filename: _selectedFiles[fileIndex]!),
+          });
+          uploadRequests.add(Dio().put('http://154.73.102.36:8121${element["url"]}', data: formData,options: Options(
+            headers: requestHeaders
+          )));
+          fileIndex++;
+        }
+        Future.wait(uploadRequests).then((value) =>ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            duration: Duration(seconds: 5),
+            content: Text("Succes souscription et fichiers")
+          ),
+          
+        ));
 
-         uploadFiles(_selectedFiles, id);
-
+        Navigator.push(
+          context,
+          MaterialPageRoute(builder: (context) => InscriptionReussie()),
+        );
       } else {
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(
@@ -502,36 +522,26 @@ while(i < 4){
             SizedBox(
               height: 15,
             ),
-            // DropdownButtonFormField(
-            //   decoration: InputDecoration(
-            //       labelText: "Country of residence",
-            //       prefixIcon: Icon(
-            //         Icons.place,
-            //         color: Color(0xFFF28D31),
-            //       ),
-            //       border: OutlineInputBorder()),
-            //   items: countries.map<DropdownMenuItem<dynamic>>((country) {
-            //     return DropdownMenuItem<dynamic>(
-            //       value: country['id'],
-            //       child: SizedBox(width: 200, child: Text(country['name'])),
-            //     );
-            //   }).toList(),
-            //   value: _value,
-            //   onChanged: (value) {
-            //     setState(() {
-            //       _value = value as int;
-            //     });
-            //   },
-            // ),
-            TextFormField(
-              controller: countryOfResidenceController,
+            DropdownButtonFormField(
               decoration: InputDecoration(
-                labelText: 'Contry of residence',
-                prefixIcon: Icon(
-                  Icons.verified_user_outlined,
-                ),
-                border: OutlineInputBorder(),
-              ),
+                  labelText: "Country of residence",
+                  prefixIcon: Icon(
+                    Icons.place,
+                    color: Color(0xFFF28D31),
+                  ),
+                  border: OutlineInputBorder()),
+              items: countries.map<DropdownMenuItem<dynamic>>((country) {
+                return DropdownMenuItem<dynamic>(
+                  value: country['id'],
+                  child: SizedBox(width: 200, child: Text(country['name'])),
+                );
+              }).toList(),
+              value: _valueCountryOfResidence,
+              onChanged: (value) {
+                setState(() {
+                  _valueCountryOfResidence = value as int;
+                });
+              },
             ),
             SizedBox(
               height: 15,
@@ -647,34 +657,57 @@ while(i < 4){
             SizedBox(
               height: 15,
             ),
-            TextFormField(
-              controller: paymentTypeController,
+            DropdownButtonFormField(
               decoration: InputDecoration(
-                labelText: 'Payment type',
-                prefixIcon: Icon(
-                  Icons.verified_user_outlined,
-                ),
-                border: OutlineInputBorder(),
-              ),
+                  labelText: "Payment type",
+                  prefixIcon: Icon(
+                    Icons.verified_user_outlined,
+                    color: Color(0xFFF28D31),
+                  ),
+                  border: OutlineInputBorder()),
+              items:  ["Périodique"].map<DropdownMenuItem<dynamic>>((comp) {
+                return DropdownMenuItem<dynamic>(
+                  value: comp,
+                  child: SizedBox(width: 200, child: Text(comp)),
+                );
+              }).toList(),
+              value: paymentTypeController.text.isEmpty ? null : paymentTypeController.text,
+              onChanged: (value) {
+                setState(() {
+                  paymentTypeController.text = value;
+                });
+              },
             ),
             SizedBox(
               height: 15,
             ),
-            TextFormField(
-              controller: periodicityController,
+            DropdownButtonFormField(
               decoration: InputDecoration(
-                labelText: 'Periodicity',
-                prefixIcon: Icon(
-                  Icons.verified_user_outlined,
-                ),
-                border: OutlineInputBorder(),
-              ),
+                  labelText: "Periodicity",
+                  prefixIcon: Icon(
+                    Icons.verified_user_outlined,
+                    color: Color(0xFFF28D31),
+                  ),
+                  border: OutlineInputBorder()),
+              items:  ["Mensuelle"].map<DropdownMenuItem<dynamic>>((comp) {
+                return DropdownMenuItem<dynamic>(
+                  value: comp,
+                  child: SizedBox(width: 200, child: Text(comp)),
+                );
+              }).toList(),
+              value: periodicityController.text.isEmpty ? null : periodicityController.text,
+              onChanged: (value) {
+                setState(() {
+                  periodicityController.text = value;
+                });
+              },
             ),
             SizedBox(
               height: 15,
             ),
             TextFormField(
               controller: commitmentAmountController,
+              keyboardType: TextInputType.number,
               decoration: InputDecoration(
                 labelText: 'Commitment amount',
                 prefixIcon: Icon(
@@ -686,16 +719,26 @@ while(i < 4){
             SizedBox(
               height: 15,
             ),
-
-            TextFormField(
-              controller: exitChoiceController,
+            DropdownButtonFormField(
               decoration: InputDecoration(
-                labelText: 'Exit choice',
-                prefixIcon: Icon(
-                  Icons.verified_user_outlined,
-                ),
-                border: OutlineInputBorder(),
-              ),
+                  labelText: "Exit choice",
+                  prefixIcon: Icon(
+                    Icons.verified_user_outlined,
+                    color: Color(0xFFF28D31),
+                  ),
+                  border: OutlineInputBorder()),
+              items:  ["capital"].map<DropdownMenuItem<dynamic>>((comp) {
+                return DropdownMenuItem<dynamic>(
+                  value: comp,
+                  child: SizedBox(width: 200, child: Text(comp)),
+                );
+              }).toList(),
+              value: exitChoiceController.text.isEmpty ? null :  exitChoiceController.text,
+              onChanged: (value) {
+                setState(() {
+                  exitChoiceController.text = value;
+                });
+              },
             ),
 
             SizedBox(
