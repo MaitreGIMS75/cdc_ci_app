@@ -746,7 +746,16 @@ while(i < 4){
             ),
             ElevatedButton(
               onPressed: () {
-                _openFilePicker();
+                showDialog(context: context, builder: (context) => AlertDialog(
+                  title: Text('A propos des fichiers'),
+                  content: Text("Les fichiers que vous nous soumettrez doivent être votre carte d'identité, votre justification de résidence et et votre justification d'expatriation dans cet ordre la."),
+                  actions: [
+                    TextButton(child: Text('ANNULER'),
+                    onPressed: ()=> Navigator.pop(context)),
+                    TextButton(child: Text('CONTINUER'),
+                    onPressed: ()=> _openFilePicker()),
+                  ],
+                ));      
               },
               child: Text('Choissisez des fichiers'),
               style: ElevatedButton.styleFrom(
