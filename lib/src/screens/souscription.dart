@@ -288,6 +288,7 @@ while(i < 4){
 
       final resultData = json.decode(response.body);
       if (resultData["result"]["status"] == 201) {
+        print('Response Body: ${json.decode(response.body)}');
         print(resultData["result"]["data"]["attachments"]);
         final attachments = resultData["result"]["data"]["attachments"] as List<dynamic>;
         List<Future> uploadRequests = [];
@@ -802,3 +803,4 @@ while(i < 4){
     );
   }
 }
+ 
