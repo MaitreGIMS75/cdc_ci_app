@@ -248,6 +248,12 @@ class _SouscriptionState extends State<Souscription> {
 
     if (firstNameController.text.isNotEmpty &&
         lastNameController.text.isNotEmpty &&
+        _valueCity != null&&
+        _valueCountrie != null&&
+        _valueCountryOfResidence != null&&
+        _valueIncome != null&&
+        _valueIdentification != null&&
+        _valueCompartment != null&&
         dateInput.text.isNotEmpty &&
         emailAdressController.text.isNotEmpty &&
         mobilePhoneController.text.isNotEmpty &&
@@ -806,8 +812,29 @@ class _SouscriptionState extends State<Souscription> {
             ),
             ElevatedButton(
               onPressed: () {
-                getToken();
+                if(_selectedFiles.length == 3){
                 CreerSouscription();
+                getToken();
+                }else{
+                  showDialog(
+                    context: context,
+                    builder: (context) => AlertDialog(
+                          title: Text('A propos des fichiers'),
+                          content: Text(
+                              "Vous devez soumettre trois fichiers !"),
+                          actions: [
+                            TextButton(
+                                child: Text('ANNULER'),
+                                onPressed: () => Navigator.pop(context)),
+                            TextButton(
+                                child: Text('CONTINUER'),
+                                onPressed: (){
+                                  _openFilePicker();
+                                  Navigator.pop(context);
+                                }),
+                          ],
+                        ));
+                }
               },
               child: Text('Continuez'),
               style: ElevatedButton.styleFrom(
