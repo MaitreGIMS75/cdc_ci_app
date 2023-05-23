@@ -13,6 +13,7 @@ import 'inscription_reussie.dart';
 
 class Souscription extends StatefulWidget {
   const Souscription({Key? key}) : super(key: key);
+  static const routeName = '/demande-souscription';
 
   @override
   State<Souscription> createState() => _SouscriptionState();
@@ -317,6 +318,7 @@ class _SouscriptionState extends State<Souscription> {
             headers: headerSubmit);
         if (SubmissionRqt.statusCode == 202) {
           print("Response Body: ${json.decode(SubmissionRqt.body)}");
+
           Navigator.push(
             context,
             MaterialPageRoute(builder: (context) => InscriptionReussie()),
@@ -772,10 +774,7 @@ class _SouscriptionState extends State<Souscription> {
                                 onPressed: () => Navigator.pop(context)),
                             TextButton(
                                 child: Text('CONTINUER'),
-                                onPressed: () {
-                                  _openFilePicker();
-                                  Navigator.pop(context);
-                                }),
+                                onPressed: () => _openFilePicker()),
                           ],
                         ));
               },

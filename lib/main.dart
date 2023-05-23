@@ -1,3 +1,11 @@
+import 'package:cdc_ci_app/src/screens/comment_souscrire.dart';
+import 'package:cdc_ci_app/src/screens/conditions.dart';
+import 'package:cdc_ci_app/src/screens/faq.dart';
+import 'package:cdc_ci_app/src/screens/home.dart';
+import 'package:cdc_ci_app/src/screens/login.dart';
+import 'package:cdc_ci_app/src/screens/simulation_ligne.dart';
+
+import 'package:cdc_ci_app/src/screens/souscription.dart';
 import 'package:flutter/material.dart';
 
 import 'src/screens/splash_screen.dart';
@@ -34,10 +42,19 @@ class MyApp extends StatelessWidget {
           appBarTheme: AppBarTheme(
               textTheme: ThemeData.light().textTheme.copyWith(
                   headline6: TextStyle(
-                      fontFamily: 'OpenSans',
+                      fontFamily: 'Quicksand',
                       fontSize: 20,
                       fontWeight: FontWeight.bold)))),
       home: SplashScreen(),
+      routes: {
+        Home.routeName: (ctx) => const Home(),
+        Login.routeName: (ctx) => const Login(),
+        CommentSouscrire.routeName: (ctx) => CommentSouscrire(),
+        Souscription.routeName: (ctx) => const Souscription(),
+        Conditions.routeName: (ctx) => const Conditions(),
+        Faq.routeName: (ctx) => const Faq(),
+        SimulationLigne.routeName: (ctx) => const SimulationLigne(),
+      },
     );
   }
 }
