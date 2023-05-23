@@ -302,7 +302,7 @@ class _SouscriptionState extends State<Souscription> {
 
       final resultData = json.decode(response.body);
       if (resultData["result"]["status"] == 201) {
-        final commit = json.decode(response.body)['results']['commit'];
+        final commit = json.decode(response.body)['results']['data']['commit'];
         print('Response Body: ${json.decode(response.body)}');
         print(resultData["result"]["data"]["attachments"]);
         final attachments =
