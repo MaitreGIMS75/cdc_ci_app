@@ -323,7 +323,7 @@ class _SouscriptionState extends State<Souscription> {
 
         for (var request in uploadRequests) {
           var response = await request;
-          if (response.statusCode == 200) {
+          if (response.statusCode == 201) {
             print('Response body : ${json.decode(response.body)}');
           } else {
             print('Upload failed');
