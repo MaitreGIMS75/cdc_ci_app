@@ -227,6 +227,10 @@ class _SouscriptionState extends State<Souscription> {
       'Authorization': 'Bearer $token',
     };
 
+    Map<String, String> HeadersSubmit = {
+      'Authorization': 'Bearer $token',
+    };
+
     if (firstNameController.text.isNotEmpty &&
         lastNameController.text.isNotEmpty &&
         dateInput.text.isNotEmpty &&
@@ -283,6 +287,7 @@ class _SouscriptionState extends State<Souscription> {
 
       final resultData = json.decode(response.body);
       if (resultData["result"]["status"] == 201) {
+        final id = json.decode(response.body)['id'];
         print('Response Body: ${json.decode(response.body)}');
         print(resultData["result"]["data"]["attachments"]);
         final attachments =
@@ -307,10 +312,19 @@ class _SouscriptionState extends State<Souscription> {
                       content: Text("Succes souscription et fichiers")),
                 ));
 
-        Navigator.push(
-          context,
-          MaterialPageRoute(builder: (context) => InscriptionReussie()),
-        );
+        var SubmissionRqt = await http.post(
+            Uri.parse(
+                'http://154.73.102.36:8121/api/v1/subscription-transactions/$id/commit'),
+            headers: HeadersSubmit);
+
+        final result = json.decode(SubmissionRqt.body);
+        if (result["result"]["status"] == 202) {
+          print('Response Body: ${json.decode(SubmissionRqt.body)}');
+          Navigator.push(
+            context,
+            MaterialPageRoute(builder: (context) => InscriptionReussie()),
+          );
+        }
       } else {
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(
