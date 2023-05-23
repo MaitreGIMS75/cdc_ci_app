@@ -317,7 +317,7 @@ class _SouscriptionState extends State<Souscription> {
           uploadRequests.add(Dio().put(
               'http://154.73.102.36:8121${element["url"]}',
               data: formData,
-              options: Options(headers: requestHeaders)));
+              options: Options(headers: requestHeaders)).then((Response) => print(Response.data)));
           fileIndex++;
         }
         Future.wait(uploadRequests)
@@ -326,6 +326,7 @@ class _SouscriptionState extends State<Souscription> {
                       duration: Duration(seconds: 5),
                       content: Text("Succes souscription et fichiers")),
                 ));
+        
 
         ValiderRequete(commit);
       } else {
