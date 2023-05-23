@@ -417,9 +417,9 @@ class _SouscriptionState extends State<Souscription> {
                     value: 'Female',
                     groupValue: valeurSexe,
                     title: const Text('Female'),
-                    onChanged: (String? val) {
+                    onChanged: (val) {
                       setState(() {
-                        valeurSexe = val as String;
+                        valeurSexe = val;
                       });
                     },
                   ),
@@ -807,21 +807,21 @@ class _SouscriptionState extends State<Souscription> {
             ElevatedButton(
               onPressed: () {
                 if(_selectedFiles.length == 3){
-                CreerSouscription();
                 getToken();
+                CreerSouscription();
                 }else{
-                  showDialog(
+                   showDialog(
                     context: context,
                     builder: (context) => AlertDialog(
                           title: Text('A propos des fichiers'),
                           content: Text(
-                              "Vous devez soumettre trois fichiers !"),
+                              "Vous devez choisir trois fichiers !"),
                           actions: [
                             TextButton(
                                 child: Text('ANNULER'),
                                 onPressed: () => Navigator.pop(context)),
                             TextButton(
-                                child: Text('CONTINUER'),
+                                child: Text('SELECTIONNER'),
                                 onPressed: (){
                                   _openFilePicker();
                                   Navigator.pop(context);
