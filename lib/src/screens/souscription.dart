@@ -220,14 +220,28 @@ class _SouscriptionState extends State<Souscription> {
     return token;
   }
 
+  Future<void> ValiderRequete(var id) async{
+     String? token = await getToken();
+     Map<String, String> headerSubmit = {
+      'Authorization': 'Bearer $token',
+    };
+
+        var SubmissionRqt = await http.post(
+            Uri.parse('http://154.73.102.36:8121/api/v1/subscription-transactions/$id/commit'),
+            headers: headerSubmit);
+        if (SubmissionRqt.statusCode == 202) {
+          print("Response Body: ${json.decode(SubmissionRqt.body)}");
+          Navigator.push(
+            context,
+            MaterialPageRoute(builder: (context) => InscriptionReussie()),
+          );
+        }
+  }
+
   Future<void> CreerSouscription() async {
     String? token = await getToken();
     Map<String, String> requestHeaders = {
       'Content-type': 'application/json',
-      'Authorization': 'Bearer $token',
-    };
-
-    Map<String, String> headerSubmit = {
       'Authorization': 'Bearer $token',
     };
 
@@ -312,16 +326,7 @@ class _SouscriptionState extends State<Souscription> {
                       content: Text("Succes souscription et fichiers")),
                 ));
 
-        var SubmissionRqt = await http.post(
-            Uri.parse('http://154.73.102.36:8121/api/v1/subscription-transactions/$id/commit'),
-            headers: headerSubmit);
-        if (SubmissionRqt.statusCode == 202) {
-          print("Response Body: ${json.decode(SubmissionRqt.body)}");
-          Navigator.push(
-            context,
-            MaterialPageRoute(builder: (context) => InscriptionReussie()),
-          );
-        }
+        ValiderRequete(id);
       } else {
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(
