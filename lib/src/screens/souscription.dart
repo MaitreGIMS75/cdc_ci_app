@@ -779,7 +779,10 @@ class _SouscriptionState extends State<Souscription> {
                                 onPressed: () => Navigator.pop(context)),
                             TextButton(
                                 child: Text('CONTINUER'),
-                                onPressed: () => _openFilePicker()),
+                                onPressed: (){
+                                  _openFilePicker();
+                                  Navigator.pop(context);
+                                }),
                           ],
                         ));
               },
