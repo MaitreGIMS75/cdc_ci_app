@@ -220,23 +220,23 @@ class _SouscriptionState extends State<Souscription> {
     return token;
   }
 
-  Future<void> ValiderRequete(var commit) async{
-     String? token = await getToken();
-     Map<String, String> headerSubmit = {
+  Future<void> ValiderRequete(var commit) async {
+    String? token = await getToken();
+    Map<String, String> headerSubmit = {
       'Authorization': 'Bearer $token',
     };
 
-        var SubmissionRqt = await http.post(
-            Uri.parse('http://154.73.102.36:8121/$commit'),
-            headers: headerSubmit);
-        if (SubmissionRqt.statusCode == 202) {
-          print("Response Status: ${SubmissionRqt.statusCode}");
-          print("Response Body: ${json.decode(SubmissionRqt.body)}");
-          Navigator.push(
-            context,
-            MaterialPageRoute(builder: (context) => InscriptionReussie()),
-          );
-        }
+    var SubmissionRqt = await http.post(
+        Uri.parse('http://154.73.102.36:8121/$commit'),
+        headers: headerSubmit);
+    if (SubmissionRqt.statusCode == 202) {
+      print("Response Status: ${SubmissionRqt.statusCode}");
+      print("Response Body: ${json.decode(SubmissionRqt.body)}");
+      Navigator.push(
+        context,
+        MaterialPageRoute(builder: (context) => InscriptionReussie()),
+      );
+    }
   }
 
   Future<void> CreerSouscription() async {
@@ -317,16 +317,25 @@ class _SouscriptionState extends State<Souscription> {
           uploadRequests.add(Dio().put(
               'http://154.73.102.36:8121${element["url"]}',
               data: formData,
-              options: Options(headers: requestHeaders)).then((Response) => print(Response.data)));
+              options: Options(headers: requestHeaders)));
           fileIndex++;
         }
+
+        for (var request in uploadRequests) {
+          var response = await request;
+          if (response.statusCode == 200) {
+            print('Response body : ${json.decode(response.body)}');
+          } else {
+            print('Upload failed');
+          }
+        }
+
         Future.wait(uploadRequests)
             .then((value) => ScaffoldMessenger.of(context).showSnackBar(
                   SnackBar(
                       duration: Duration(seconds: 5),
                       content: Text("Succes souscription et fichiers")),
                 ));
-        
 
         ValiderRequete(commit);
       } else {
@@ -779,7 +788,7 @@ class _SouscriptionState extends State<Souscription> {
                                 onPressed: () => Navigator.pop(context)),
                             TextButton(
                                 child: Text('CONTINUER'),
-                                onPressed: (){
+                                onPressed: () {
                                   _openFilePicker();
                                   Navigator.pop(context);
                                 }),
@@ -806,28 +815,28 @@ class _SouscriptionState extends State<Souscription> {
             ),
             ElevatedButton(
               onPressed: () {
-                if(_selectedFiles.length == 3){
-                getToken();
-                CreerSouscription();
-                }else{
-                   showDialog(
-                    context: context,
-                    builder: (context) => AlertDialog(
-                          title: Text('A propos des fichiers'),
-                          content: Text(
-                              "Vous devez choisir trois fichiers !"),
-                          actions: [
-                            TextButton(
-                                child: Text('ANNULER'),
-                                onPressed: () => Navigator.pop(context)),
-                            TextButton(
-                                child: Text('SELECTIONNER'),
-                                onPressed: (){
-                                  _openFilePicker();
-                                  Navigator.pop(context);
-                                }),
-                          ],
-                        ));
+                if (_selectedFiles.length == 3) {
+                  getToken();
+                  CreerSouscription();
+                } else {
+                  showDialog(
+                      context: context,
+                      builder: (context) => AlertDialog(
+                            title: Text('A propos des fichiers'),
+                            content:
+                                Text("Vous devez choisir trois fichiers !"),
+                            actions: [
+                              TextButton(
+                                  child: Text('ANNULER'),
+                                  onPressed: () => Navigator.pop(context)),
+                              TextButton(
+                                  child: Text('SELECTIONNER'),
+                                  onPressed: () {
+                                    _openFilePicker();
+                                    Navigator.pop(context);
+                                  }),
+                            ],
+                          ));
                 }
               },
               child: Text('Continuez'),
