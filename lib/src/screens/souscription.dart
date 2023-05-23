@@ -272,7 +272,7 @@ class _SouscriptionState extends State<Souscription> {
               "subscriber": {
                 "first_name": firstNameController.text,
                 "last_name": lastNameController.text,
-                "sex": "$valeurSexe",
+                "sex": "Male",
                 "birth_date": dateInput.text,
                 "native_country": _valueCountrie,
                 "birth_city": _valueCity,
