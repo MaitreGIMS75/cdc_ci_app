@@ -226,7 +226,7 @@ class _SouscriptionState extends State<Souscription> {
       'Authorization': 'Bearer $token',
     };
 
-    Map<String, String> HeadersSubmit = {
+    Map<String, String> headerSubmit = {
       'Authorization': 'Bearer $token',
     };
 
@@ -314,11 +314,9 @@ class _SouscriptionState extends State<Souscription> {
         var SubmissionRqt = await http.post(
             Uri.parse(
                 'http://154.73.102.36:8121/api/v1/subscription-transactions/$id/commit'),
-            headers: HeadersSubmit);
-
-        final result = json.decode(SubmissionRqt.body);
-        if (result["result"]["status"] == 202) {
-           print('Response Body: ${json.decode(SubmissionRqt.body)}');
+            headers: headerSubmit);
+        if (SubmissionRqt.statusCode == 202) {
+          print("Response Body: ${json.decode(SubmissionRqt.body)}");
           Navigator.push(
             context,
             MaterialPageRoute(builder: (context) => InscriptionReussie()),
