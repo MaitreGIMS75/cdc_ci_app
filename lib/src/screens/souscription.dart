@@ -9,7 +9,6 @@ import 'package:intl/intl.dart';
 import 'package:file_picker/file_picker.dart';
 import 'package:uuid/uuid.dart';
 
-
 import 'inscription_reussie.dart';
 
 class Souscription extends StatefulWidget {
@@ -71,7 +70,6 @@ class _SouscriptionState extends State<Souscription> {
     getIncomes();
     getIdentifications();
     getCompartments();
-
   }
 
   getData() async {
@@ -130,52 +128,47 @@ class _SouscriptionState extends State<Souscription> {
     int i = 1;
     bool checkedfiles = false;
     String type = "";
-while(i < 4){
-    etag = "AOO$i";
-    if(i==1){
+    while (i < 4) {
+      etag = "AOO$i";
+      if (i == 1) {
         type = "identity-justification";
-    }
-    else if(i==2){
+      } else if (i == 2) {
         type = "residence-justification";
-    }
-    else if(i==3){
+      } else if (i == 3) {
         type = "expatriation-justification";
-    }
-     var request = http.MultipartRequest(
-      'PUT',
-      Uri.parse(
-          'http://154.73.102.36:8121/api/v1/subscription-transactions/$id/attachments/$type/$etag'),
-    );
-
-    request.headers.addAll(requestHeaders);
-    i-=1;
-    
-    for (var path in filePaths) {
-      var file = await http.MultipartFile.fromPath('_selectedfiles[$i]', path!);
-      request.files.add(file);
-    }
-
-    i+=2;
-    if(i==3){
-      checkedfiles=true;
-    }
-
-    var response = await request.send();
-    if (response.statusCode == 201 && checkedfiles == true) {
-      print('File uploaded successfully');
-      Navigator.push(
-        context,
-        MaterialPageRoute(builder: (context) => InscriptionReussie()),
+      }
+      var request = http.MultipartRequest(
+        'PUT',
+        Uri.parse(
+            'http://154.73.102.36:8121/api/v1/subscription-transactions/$id/attachments/$type/$etag'),
       );
-    } else if(response.statusCode != 201){
-      print('Error uploading file');
+
+      request.headers.addAll(requestHeaders);
+      i -= 1;
+
+      for (var path in filePaths) {
+        var file =
+            await http.MultipartFile.fromPath('_selectedfiles[$i]', path!);
+        request.files.add(file);
+      }
+
+      i += 2;
+      if (i == 3) {
+        checkedfiles = true;
+      }
+
+      var response = await request.send();
+      if (response.statusCode == 201 && checkedfiles == true) {
+        print('File uploaded successfully');
+        Navigator.push(
+          context,
+          MaterialPageRoute(builder: (context) => InscriptionReussie()),
+        );
+      } else if (response.statusCode != 201) {
+        print('Error uploading file');
+      }
     }
-}
-      
-      
-}
-   
-  
+  }
 
   getIdentifications() async {
     String? token = await getToken();
@@ -218,8 +211,6 @@ while(i < 4){
         _selectedFiles = result.paths;
       });
     }
-
-    
   }
 
   Future<String?> getToken() async {
@@ -232,6 +223,10 @@ while(i < 4){
     String? token = await getToken();
     Map<String, String> requestHeaders = {
       'Content-type': 'application/json',
+      'Authorization': 'Bearer $token',
+    };
+
+    Map<String, String> HeadersSubmit = {
       'Authorization': 'Bearer $token',
     };
 
@@ -278,7 +273,10 @@ while(i < 4){
               "attachments": [
                 {"type": "identity-justification", "etag": const Uuid().v4()},
                 {"type": "residence-justification", "etag": const Uuid().v4()},
-                {"type": "expatriation-justification", "etag": const Uuid().v4()}
+                {
+                  "type": "expatriation-justification",
+                  "etag": const Uuid().v4()
+                }
               ]
             }
           },
@@ -288,32 +286,43 @@ while(i < 4){
 
       final resultData = json.decode(response.body);
       if (resultData["result"]["status"] == 201) {
+        final id = json.decode(response.body)['id'];
         print('Response Body: ${json.decode(response.body)}');
         print(resultData["result"]["data"]["attachments"]);
-        final attachments = resultData["result"]["data"]["attachments"] as List<dynamic>;
+        final attachments =
+            resultData["result"]["data"]["attachments"] as List<dynamic>;
         List<Future> uploadRequests = [];
         int fileIndex = 0;
         for (var element in attachments) {
           FormData formData = FormData.fromMap({
-            'ufile': await MultipartFile.fromFile(_selectedFiles[fileIndex]!, filename: _selectedFiles[fileIndex]!),
+            'ufile': await MultipartFile.fromFile(_selectedFiles[fileIndex]!,
+                filename: _selectedFiles[fileIndex]!),
           });
-          uploadRequests.add(Dio().put('http://154.73.102.36:8121${element["url"]}', data: formData,options: Options(
-            headers: requestHeaders
-          )));
+          uploadRequests.add(Dio().put(
+              'http://154.73.102.36:8121${element["url"]}',
+              data: formData,
+              options: Options(headers: requestHeaders)));
           fileIndex++;
         }
-        Future.wait(uploadRequests).then((value) =>ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(
-            duration: Duration(seconds: 5),
-            content: Text("Succes souscription et fichiers")
-          ),
-          
-        ));
+        Future.wait(uploadRequests)
+            .then((value) => ScaffoldMessenger.of(context).showSnackBar(
+                  SnackBar(
+                      duration: Duration(seconds: 5),
+                      content: Text("Succes souscription et fichiers")),
+                ));
 
-        Navigator.push(
-          context,
-          MaterialPageRoute(builder: (context) => InscriptionReussie()),
-        );
+        var SubmissionRqt = await http.post(
+            Uri.parse(
+                'http://154.73.102.36:8121/api/v1/subscription-transactions/$id/commit'),
+            headers: HeadersSubmit);
+
+        final result = json.decode(SubmissionRqt.body);
+        if (result["result"]["status"] == 202) {
+          Navigator.push(
+            context,
+            MaterialPageRoute(builder: (context) => InscriptionReussie()),
+          );
+        }
       } else {
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(
@@ -341,7 +350,7 @@ while(i < 4){
         padding: EdgeInsets.all(20.0),
         child: ListView(
           children: [
-           const Center(
+            const Center(
               child: Text(
                 'Informations of subscriber',
                 style: TextStyle(
@@ -351,12 +360,12 @@ while(i < 4){
                 ),
               ),
             ),
-          const  SizedBox(
+            const SizedBox(
               height: 15,
             ),
             TextFormField(
               controller: firstNameController,
-              decoration:const InputDecoration(
+              decoration: const InputDecoration(
                 labelText: 'First Name',
                 prefixIcon: Icon(
                   Icons.verified_user_outlined,
@@ -364,12 +373,12 @@ while(i < 4){
                 border: OutlineInputBorder(),
               ),
             ),
-          const  SizedBox(
+            const SizedBox(
               height: 15,
             ),
             TextFormField(
               controller: lastNameController,
-              decoration:const InputDecoration(
+              decoration: const InputDecoration(
                 labelText: 'Last Name',
                 prefixIcon: Icon(
                   Icons.verified_user_outlined,
@@ -666,13 +675,15 @@ while(i < 4){
                     color: Color(0xFFF28D31),
                   ),
                   border: OutlineInputBorder()),
-              items:  ["Périodique"].map<DropdownMenuItem<dynamic>>((comp) {
+              items: ["Périodique"].map<DropdownMenuItem<dynamic>>((comp) {
                 return DropdownMenuItem<dynamic>(
                   value: comp,
                   child: SizedBox(width: 200, child: Text(comp)),
                 );
               }).toList(),
-              value: paymentTypeController.text.isEmpty ? null : paymentTypeController.text,
+              value: paymentTypeController.text.isEmpty
+                  ? null
+                  : paymentTypeController.text,
               onChanged: (value) {
                 setState(() {
                   paymentTypeController.text = value;
@@ -690,13 +701,15 @@ while(i < 4){
                     color: Color(0xFFF28D31),
                   ),
                   border: OutlineInputBorder()),
-              items:  ["Mensuelle"].map<DropdownMenuItem<dynamic>>((comp) {
+              items: ["Mensuelle"].map<DropdownMenuItem<dynamic>>((comp) {
                 return DropdownMenuItem<dynamic>(
                   value: comp,
                   child: SizedBox(width: 200, child: Text(comp)),
                 );
               }).toList(),
-              value: periodicityController.text.isEmpty ? null : periodicityController.text,
+              value: periodicityController.text.isEmpty
+                  ? null
+                  : periodicityController.text,
               onChanged: (value) {
                 setState(() {
                   periodicityController.text = value;
@@ -728,35 +741,44 @@ while(i < 4){
                     color: Color(0xFFF28D31),
                   ),
                   border: OutlineInputBorder()),
-              items:  ["capital"].map<DropdownMenuItem<dynamic>>((comp) {
+              items: ["capital"].map<DropdownMenuItem<dynamic>>((comp) {
                 return DropdownMenuItem<dynamic>(
                   value: comp,
                   child: SizedBox(width: 200, child: Text(comp)),
                 );
               }).toList(),
-              value: exitChoiceController.text.isEmpty ? null :  exitChoiceController.text,
+              value: exitChoiceController.text.isEmpty
+                  ? null
+                  : exitChoiceController.text,
               onChanged: (value) {
                 setState(() {
                   exitChoiceController.text = value;
                 });
               },
             ),
-
             SizedBox(
               height: 15,
             ),
             ElevatedButton(
               onPressed: () {
-                showDialog(context: context, builder: (context) => AlertDialog(
-                  title: Text('A propos des fichiers'),
-                  content: Text("Les fichiers que vous nous soumettrez doivent être votre carte d'identité, votre justification de résidence et et votre justification d'expatriation dans cet ordre la."),
-                  actions: [
-                    TextButton(child: Text('ANNULER'),
-                    onPressed: ()=> Navigator.pop(context)),
-                    TextButton(child: Text('CONTINUER'),
-                    onPressed: ()=> _openFilePicker()),
-                  ],
-                ));      
+                showDialog(
+                    context: context,
+                    builder: (context) => AlertDialog(
+                          title: Text('A propos des fichiers'),
+                          content: Text(
+                              "Les fichiers que vous nous soumettrez doivent être votre carte d'identité, votre justification de résidence et et votre justification d'expatriation dans cet ordre la."),
+                          actions: [
+                            TextButton(
+                                child: Text('ANNULER'),
+                                onPressed: () => Navigator.pop(context)),
+                            TextButton(
+                                child: Text('CONTINUER'),
+                                onPressed: () {
+                                  _openFilePicker();
+                                  Navigator.pop(context);
+                                }),
+                          ],
+                        ));
               },
               child: Text('Choissisez des fichiers'),
               style: ElevatedButton.styleFrom(
@@ -773,7 +795,6 @@ while(i < 4){
                 elevation: 5,
               ),
             ),
-
             SizedBox(
               height: 50,
             ),
@@ -803,4 +824,3 @@ while(i < 4){
     );
   }
 }
- 
