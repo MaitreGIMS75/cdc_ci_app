@@ -313,12 +313,10 @@ class _SouscriptionState extends State<Souscription> {
                 ));
 
         var SubmissionRqt = await http.post(
-            Uri.parse(
-                'http://154.73.102.36:8121/api/v1/subscription-transactions/$id/commit'),
+            Uri.parse('http://154.73.102.36:8121/api/v1/subscription-transactions/$id/commit'),
             headers: headerSubmit);
         if (SubmissionRqt.statusCode == 202) {
           print("Response Body: ${json.decode(SubmissionRqt.body)}");
-
           Navigator.push(
             context,
             MaterialPageRoute(builder: (context) => InscriptionReussie()),
