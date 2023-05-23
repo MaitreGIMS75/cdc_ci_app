@@ -248,12 +248,6 @@ class _SouscriptionState extends State<Souscription> {
 
     if (firstNameController.text.isNotEmpty &&
         lastNameController.text.isNotEmpty &&
-        _valueCity != null&&
-        _valueCountrie != null&&
-        _valueCountryOfResidence != null&&
-        _valueIncome != null&&
-        _valueIdentification != null&&
-        _valueCompartment != null&&
         dateInput.text.isNotEmpty &&
         emailAdressController.text.isNotEmpty &&
         mobilePhoneController.text.isNotEmpty &&
@@ -272,7 +266,7 @@ class _SouscriptionState extends State<Souscription> {
               "subscriber": {
                 "first_name": firstNameController.text,
                 "last_name": lastNameController.text,
-                "sex": "Male",
+                "sex": "male",
                 "birth_date": dateInput.text,
                 "native_country": _valueCountrie,
                 "birth_city": _valueCity,
@@ -423,7 +417,7 @@ class _SouscriptionState extends State<Souscription> {
                     value: 'Female',
                     groupValue: valeurSexe,
                     title: const Text('Female'),
-                    onChanged: (val) {
+                    onChanged: (String? val) {
                       setState(() {
                         valeurSexe = val as String;
                       });
