@@ -318,6 +318,7 @@ class _SouscriptionState extends State<Souscription> {
 
         final result = json.decode(SubmissionRqt.body);
         if (result["result"]["status"] == 202) {
+           print('Response Body: ${json.decode(SubmissionRqt.body)}');
           Navigator.push(
             context,
             MaterialPageRoute(builder: (context) => InscriptionReussie()),
