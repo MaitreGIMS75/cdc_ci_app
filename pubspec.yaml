@@ -37,6 +37,7 @@ dependencies:
   api_cache_manager: ^1.0.2
   snippet_coder_utils: ^1.0.13
   shared_preferences: ^2.1.0
+  
 
 
   # The following adds the Cupertino Icons font to your application.
@@ -48,6 +49,7 @@ dependencies:
   dio: ^5.1.2
   uuid: ^3.0.7
   #flutter_native_splash: ^2.2.18
+  accordion: ^2.5.1
 
 dev_dependencies:
   flutter_test:
@@ -91,6 +93,14 @@ flutter:
     - assets/images/insc_reussie.png
     - assets/images/visage.jpg
     - assets/images/lio.jpg
+    - assets/images/logo_home.png
+    - assets/images/femme-min.png
+    - assets/images/desc_produit-min.png
+    - assets/images/comment_souscrire.png
+    - assets/images/un.png
+    - assets/images/deux.png
+    - assets/images/trois.png
+    - assets/images/Signature.png
   #   - images/a_dot_ham.jpeg
 
   # An image asset can refer to one or more resolution-specific "variants", see

@@ -1,7 +1,15 @@
 import 'dart:convert';
 
-//import 'package:cdc_ci_app/src/screens/acceuil.dart';
+import 'package:cdc_ci_app/src/screens/acceuil.dart';
+import 'package:cdc_ci_app/src/screens/conditions.dart';
+import 'package:cdc_ci_app/src/screens/connexion.dart';
+import 'package:cdc_ci_app/src/screens/demande_versement.dart';
+import 'package:cdc_ci_app/src/screens/documents.dart';
+import 'package:cdc_ci_app/src/screens/eligible.dart';
+import 'package:cdc_ci_app/src/screens/inscription.dart';
 import 'package:cdc_ci_app/src/screens/souscription.dart';
+import 'package:cdc_ci_app/src/screens/splash_screen.dart';
+import 'package:cdc_ci_app/src/screens/versement.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 
@@ -11,6 +19,8 @@ import 'package:shared_preferences/shared_preferences.dart';
 
 class Login extends StatefulWidget {
   const Login({super.key});
+
+  static const routeName = '/login';
 
   @override
   State<Login> createState() => _LoginState();
@@ -34,9 +44,9 @@ class _LoginState extends State<Login> {
           padding: EdgeInsets.all(20.0),
           child: ListView(
             children: [
-              CircleAvatar(
-                radius: 100,
-                backgroundImage: AssetImage(tVisage),
+              Image(
+                width: MediaQuery.of(context).size.width * 0.9,
+                image: AssetImage(logoHome),
               ),
               SizedBox(
                 height: 30,
@@ -95,20 +105,11 @@ class _LoginState extends State<Login> {
               SizedBox(
                 height: 50,
               ),
-              Text(
-                'Mot de passe oublié ?',
-                style: TextStyle(
-                  color: Colors.black,
-                  fontWeight: FontWeight.bold,
-                  fontSize: 20,
-                ),
-              ),
-              SizedBox(
-                height: 50,
-              ),
               OutlinedButton(
-                onPressed: () {},
-                child: Text('S\'inscrire'),
+                onPressed: () {
+                  Navigator.of(context).pushNamed(Souscription.routeName);
+                },
+                child: Text('Je souscrit au produit'),
                 style: ElevatedButton.styleFrom(
                     backgroundColor: Color(0xFFECF2FF),
                     padding: EdgeInsets.all(10),

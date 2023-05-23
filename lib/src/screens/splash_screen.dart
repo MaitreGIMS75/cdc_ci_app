@@ -1,3 +1,4 @@
+import 'package:cdc_ci_app/src/screens/home.dart';
 import 'package:flutter/material.dart';
 
 import '../constants/images_strings.dart';
@@ -47,6 +48,6 @@ class _SplashScreenState extends State<SplashScreen> {
     });
     await Future.delayed(Duration(milliseconds: 10000));
     Navigator.pushReplacement(
-        context, MaterialPageRoute(builder: (context) => Login()));
+        context, MaterialPageRoute(builder: (context) => Home()));
   }
 }
