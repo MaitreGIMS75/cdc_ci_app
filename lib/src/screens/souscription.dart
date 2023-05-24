@@ -230,7 +230,7 @@ class _SouscriptionState extends State<Souscription> {
         Uri.parse('http://154.73.102.36:8121/$commit'),
         headers: headerSubmit);
     if (SubmissionRqt.statusCode == 202) {
-      print(json.decode(SubmissionRqt.body)['result']);
+      print('Submission body : ${json.decode(SubmissionRqt.body)['result']}');
       Navigator.push(
         context,
         MaterialPageRoute(builder: (context) => InscriptionReussie()),
