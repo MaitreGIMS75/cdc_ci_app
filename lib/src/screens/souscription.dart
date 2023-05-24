@@ -230,8 +230,7 @@ class _SouscriptionState extends State<Souscription> {
         Uri.parse('http://154.73.102.36:8121/$commit'),
         headers: headerSubmit);
     if (SubmissionRqt.statusCode == 202) {
-      print("Response Status: ${SubmissionRqt.statusCode}");
-      print("Response Body: ${json.decode(SubmissionRqt.body)}");
+      print('Submission body : ${json.decode(SubmissionRqt.body)['result']}');
       Navigator.push(
         context,
         MaterialPageRoute(builder: (context) => InscriptionReussie()),
@@ -325,6 +324,7 @@ class _SouscriptionState extends State<Souscription> {
           var response = await request;
           if (response.statusCode == 201) {
             print(response.data['result']);
+            ValiderRequete(commit);
           } else {
             print('Upload failed');
           }
@@ -337,7 +337,6 @@ class _SouscriptionState extends State<Souscription> {
                       content: Text("Succes souscription et fichiers")),
                 ));
 
-        ValiderRequete(commit);
       } else {
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(
