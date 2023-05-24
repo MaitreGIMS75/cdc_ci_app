@@ -227,7 +227,7 @@ class _SouscriptionState extends State<Souscription> {
     };
 
     var SubmissionRqt = await http.post(
-        Uri.parse('http://154.73.102.36:8121/$commit'),
+        Uri.parse('http://154.73.102.36:8121$commit'),
         headers: headerSubmit);
     if (SubmissionRqt.statusCode == 202) {
       print('Submission body : ${json.decode(SubmissionRqt.body)['result']}');
@@ -235,6 +235,8 @@ class _SouscriptionState extends State<Souscription> {
         context,
         MaterialPageRoute(builder: (context) => InscriptionReussie()),
       );
+    }else{
+      print('Erreur de soumission');
     }
   }
 
