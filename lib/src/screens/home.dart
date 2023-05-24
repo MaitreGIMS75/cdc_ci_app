@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 
 import '../constants/images_strings.dart';
 import 'conditions.dart';
+import 'contactez_nous.dart';
 import 'faq.dart';
 
 class Home extends StatelessWidget {
@@ -206,7 +207,7 @@ class Home extends StatelessWidget {
         print('Je dépose mon épargne');
         break;
       case 4:
-        print('Nous contacter');
+        Navigator.of(context).pushNamed(ContactezNous.routeName);
         break;
     }
   }

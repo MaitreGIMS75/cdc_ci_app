@@ -2,6 +2,7 @@ import 'package:cdc_ci_app/src/screens/simulation_ligne.dart';
 import 'package:flutter/material.dart';
 
 import '../constants/images_strings.dart';
+import 'contactez_nous.dart';
 import 'faq.dart';
 
 class Conditions extends StatelessWidget {
@@ -1083,7 +1084,7 @@ class Conditions extends StatelessWidget {
         print('Je dépose mon épargne');
         break;
       case 4:
-        print('Nous contacter');
+        Navigator.of(context).pushNamed(ContactezNous.routeName);
         break;
     }
   }

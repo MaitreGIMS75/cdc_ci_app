@@ -5,6 +5,8 @@ import 'package:flutter/material.dart';
 import 'package:accordion/accordion.dart';
 import 'package:accordion/controllers.dart';
 
+import 'contactez_nous.dart';
+
 class Faq extends StatelessWidget {
   static const routeName = '/faq';
 
@@ -403,7 +405,7 @@ class Faq extends StatelessWidget {
         print('Je dépose mon épargne');
         break;
       case 4:
-        print('Nous contacter');
+        Navigator.of(context).pushNamed(ContactezNous.routeName);
         break;
     }
   }

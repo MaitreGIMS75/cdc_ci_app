@@ -5,6 +5,7 @@ import 'package:cdc_ci_app/src/screens/simulation_ligne.dart';
 import 'package:cdc_ci_app/src/screens/souscription.dart';
 import 'package:flutter/material.dart';
 import '../constants/images_strings.dart';
+import 'contactez_nous.dart';
 
 class CommentSouscrire extends StatelessWidget {
   static const routeName = '/comment-souscrire';
@@ -338,7 +339,7 @@ class CommentSouscrire extends StatelessWidget {
         print('Je dépose mon épargne');
         break;
       case 4:
-        print('Nous contacter');
+        Navigator.of(context).pushNamed(ContactezNous.routeName);
         break;
     }
   }

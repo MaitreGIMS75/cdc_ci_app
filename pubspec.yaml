@@ -101,6 +101,12 @@ flutter:
     - assets/images/deux.png
     - assets/images/trois.png
     - assets/images/Signature.png
+    - assets/images/select_comp.png
+    - assets/images/select_period.png
+    - assets/images/capital_boni.png
+    - assets/images/pret_immo.png
+    - assets/images/rente_viagere.png
+    - assets/images/reversible.png
   #   - images/a_dot_ham.jpeg
 
   # An image asset can refer to one or more resolution-specific "variants", see

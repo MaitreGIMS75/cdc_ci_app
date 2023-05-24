@@ -1,5 +1,6 @@
 import 'package:cdc_ci_app/src/screens/comment_souscrire.dart';
 import 'package:cdc_ci_app/src/screens/conditions.dart';
+import 'package:cdc_ci_app/src/screens/contactez_nous.dart';
 import 'package:cdc_ci_app/src/screens/faq.dart';
 import 'package:cdc_ci_app/src/screens/home.dart';
 import 'package:cdc_ci_app/src/screens/login.dart';
@@ -54,6 +55,7 @@ class MyApp extends StatelessWidget {
         Conditions.routeName: (ctx) => const Conditions(),
         Faq.routeName: (ctx) => const Faq(),
         SimulationLigne.routeName: (ctx) => const SimulationLigne(),
+        ContactezNous.routeName: (ctx) => const ContactezNous(),
       },
     );
   }
