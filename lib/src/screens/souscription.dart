@@ -119,58 +119,6 @@ class _SouscriptionState extends State<Souscription> {
     });
   }
 
-  Future<void> uploadFiles(List<String?> filePaths, String id) async {
-    String? token = await getToken();
-    Map<String, String> requestHeaders = {
-      'Content-type': 'multipart/form-data',
-      'Authorization': 'Bearer $token',
-    };
-
-    int i = 1;
-    bool checkedfiles = false;
-    String type = "";
-    while (i < 4) {
-      etag = "AOO$i";
-      if (i == 1) {
-        type = "identity-justification";
-      } else if (i == 2) {
-        type = "residence-justification";
-      } else if (i == 3) {
-        type = "expatriation-justification";
-      }
-      var request = http.MultipartRequest(
-        'PUT',
-        Uri.parse(
-            'http://154.73.102.36:8121/api/v1/subscription-transactions/$id/attachments/$type/$etag'),
-      );
-
-      request.headers.addAll(requestHeaders);
-      i -= 1;
-
-      for (var path in filePaths) {
-        var file =
-            await http.MultipartFile.fromPath('_selectedfiles[$i]', path!);
-        request.files.add(file);
-      }
-
-      i += 2;
-      if (i == 3) {
-        checkedfiles = true;
-      }
-
-      var response = await request.send();
-      if (response.statusCode == 201 && checkedfiles == true) {
-        print('File uploaded successfully');
-        Navigator.push(
-          context,
-          MaterialPageRoute(builder: (context) => InscriptionReussie()),
-        );
-      } else if (response.statusCode != 201) {
-        print('Error uploading file');
-      }
-    }
-  }
-
   getIdentifications() async {
     String? token = await getToken();
     final res = await http.get(
@@ -205,6 +153,7 @@ class _SouscriptionState extends State<Souscription> {
     final result = await FilePicker.platform.pickFiles(
       type: FileType.any,
       allowMultiple: true,
+      allowedExtensions: ['pdf', 'png', 'jpg', 'jpeg'],
     );
 
     if (result != null) {
@@ -220,6 +169,7 @@ class _SouscriptionState extends State<Souscription> {
     return token;
   }
 
+//Fonction d'envoie du commit
   Future<void> ValiderRequete(var commit) async {
     String? token = await getToken();
     Map<String, String> headerSubmit = {
@@ -230,6 +180,7 @@ class _SouscriptionState extends State<Souscription> {
         Uri.parse('$finalcommit'),
         headers: headerSubmit);
     if (SubmissionRqt.statusCode == 202) {
+      //Impression du resultat du deuxième POST
       print('Submission body : ${json.decode(SubmissionRqt.body)['result']}');
       Navigator.push(
         context,
@@ -248,6 +199,8 @@ class _SouscriptionState extends State<Souscription> {
       'Authorization': 'Bearer $token',
     };
 
+    //Envoie de la première requete POST
+
     if (firstNameController.text.isNotEmpty &&
         lastNameController.text.isNotEmpty &&
         dateInput.text.isNotEmpty &&
@@ -264,7 +217,7 @@ class _SouscriptionState extends State<Souscription> {
         body: jsonEncode(
           {
             "params": {
-              "tag": const Uuid().v4(),
+              "tag": "${const Uuid().v4()}",
               "subscriber": {
                 "first_name": firstNameController.text,
                 "last_name": lastNameController.text,
@@ -289,11 +242,11 @@ class _SouscriptionState extends State<Souscription> {
                 "exit_choice": exitChoiceController.text
               },
               "attachments": [
-                {"type": "identity-justification", "etag": const Uuid().v4()},
-                {"type": "residence-justification", "etag": const Uuid().v4()},
+                {"type": "identity-justification", "etag": "${const Uuid().v4()}"},
+                {"type": "residence-justification", "etag": "${const Uuid().v4()}"},
                 {
                   "type": "expatriation-justification",
-                  "etag": const Uuid().v4()
+                  "etag": "${const Uuid().v4()}"
                 }
               ]
             }
@@ -302,10 +255,15 @@ class _SouscriptionState extends State<Souscription> {
         headers: requestHeaders,
       );
 
+      //Impression du resultat du premier POST
       final resultData = json.decode(response.body);
       if (resultData["result"]["status"] == 201) {
-        final commit = json.decode(response.body)['result']['data']['commit'];
+        //Extraction du commit
+        final commit = json.decode(response.body)["result"]["data"]["_links"]["commit"]["href"];
+        print('$commit');
         print('Response Body: ${json.decode(response.body)}');
+
+        //Uploading des fichiers
         print(resultData["result"]["data"]["attachments"]);
         final attachments =
             resultData["result"]["data"]["attachments"] as List<dynamic>;
@@ -317,7 +275,7 @@ class _SouscriptionState extends State<Souscription> {
                 filename: _selectedFiles[fileIndex]!),
           });
           uploadRequests.add(Dio().put(
-              'http://154.73.102.36:8121${element["url"]}',
+              'http://154.73.102.36:8121${element["_links"]["upload"]["href"]}',
               data: formData,
               options: Options(headers: requestHeaders)));
           fileIndex++;
@@ -326,6 +284,7 @@ class _SouscriptionState extends State<Souscription> {
         for (var request in uploadRequests) {
           var response = await request;
           if (response.statusCode == 201) {
+            //Print de la reponse du PUT et envoie du commit
             print(response.data['result']);
             ValiderRequete(commit);
           } else {
