@@ -123,6 +123,7 @@ class _SouscriptionState extends State<Souscription> {
     });
   }
 
+<<<<<<< HEAD
   Future<void> uploadFiles(List<String?> filePaths, String id) async {
     String? token = await getToken();
     Map<String, String> requestHeaders = {
@@ -175,6 +176,8 @@ class _SouscriptionState extends State<Souscription> {
     }
   }
 
+=======
+>>>>>>> fccd2c6e754c27ec95ff23f169eb36c6b905f5f1
   getIdentifications() async {
     String? token = await getToken();
     final res = await http.get(
@@ -209,6 +212,7 @@ class _SouscriptionState extends State<Souscription> {
     final result = await FilePicker.platform.pickFiles(
       type: FileType.any,
       allowMultiple: true,
+      allowedExtensions: ['pdf', 'png', 'jpg', 'jpeg'],
     );
 
     if (result != null) {
@@ -224,7 +228,12 @@ class _SouscriptionState extends State<Souscription> {
     return token;
   }
 
+<<<<<<< HEAD
   Future<void> validerRequete(var commit) async {
+=======
+//Fonction d'envoie du commit
+  Future<void> ValiderRequete(var commit) async {
+>>>>>>> fccd2c6e754c27ec95ff23f169eb36c6b905f5f1
     String? token = await getToken();
     Map<String, String> headerSubmit = {
       'Authorization': 'Bearer $token',
@@ -233,7 +242,12 @@ class _SouscriptionState extends State<Souscription> {
     var SubmissionRqt =
         await http.post(Uri.parse(finalcommit), headers: headerSubmit);
     if (SubmissionRqt.statusCode == 202) {
+<<<<<<< HEAD
       /* print('Submission body : ${json.decode(SubmissionRqt.body)['result']}');
+=======
+      //Impression du resultat du deuxième POST
+      print('Submission body : ${json.decode(SubmissionRqt.body)['result']}');
+>>>>>>> fccd2c6e754c27ec95ff23f169eb36c6b905f5f1
       Navigator.push(
         context,
         MaterialPageRoute(builder: (context) => InscriptionReussie()),
@@ -254,6 +268,8 @@ class _SouscriptionState extends State<Souscription> {
       'Authorization': 'Bearer $token',
     };
 
+    //Envoie de la première requete POST
+
     if (firstNameController.text.isNotEmpty &&
         lastNameController.text.isNotEmpty &&
         dateInput.text.isNotEmpty &&
@@ -270,7 +286,7 @@ class _SouscriptionState extends State<Souscription> {
         body: jsonEncode(
           {
             "params": {
-              "tag": const Uuid().v4(),
+              "tag": "${const Uuid().v4()}",
               "subscriber": {
                 "first_name": firstNameController.text,
                 "last_name": lastNameController.text,
@@ -295,11 +311,11 @@ class _SouscriptionState extends State<Souscription> {
                 "exit_choice": exitChoiceController.text
               },
               "attachments": [
-                {"type": "identity-justification", "etag": const Uuid().v4()},
-                {"type": "residence-justification", "etag": const Uuid().v4()},
+                {"type": "identity-justification", "etag": "${const Uuid().v4()}"},
+                {"type": "residence-justification", "etag": "${const Uuid().v4()}"},
                 {
                   "type": "expatriation-justification",
-                  "etag": const Uuid().v4()
+                  "etag": "${const Uuid().v4()}"
                 }
               ]
             }
@@ -308,13 +324,22 @@ class _SouscriptionState extends State<Souscription> {
         headers: requestHeaders,
       );
 
+      //Impression du resultat du premier POST
       final resultData = json.decode(response.body);
 
       if (resultData["result"]["status"] == 201) {
+<<<<<<< HEAD
         final commit = resultData['result']['data']['_links']['commit']["href"];
         print('Commit URL: $commit');
 
+=======
+        //Extraction du commit
+        final commit = json.decode(response.body)["result"]["data"]["_links"]["commit"]["href"];
+        print('$commit');
+>>>>>>> fccd2c6e754c27ec95ff23f169eb36c6b905f5f1
         print('Response Body: ${json.decode(response.body)}');
+
+        //Uploading des fichiers
         print(resultData["result"]["data"]["attachments"]);
         final attachments =
             resultData["result"]["data"]["attachments"] as List<dynamic>;
@@ -326,10 +351,16 @@ class _SouscriptionState extends State<Souscription> {
                 filename: _selectedFiles[fileIndex]!),
           });
           uploadRequests.add(Dio().put(
+<<<<<<< HEAD
             'http://154.73.102.36:8121${element["_links"]["upload"]["href"]}',
             data: formData,
             options: Options(headers: requestHeaders),
           ));
+=======
+              'http://154.73.102.36:8121${element["_links"]["upload"]["href"]}',
+              data: formData,
+              options: Options(headers: requestHeaders)));
+>>>>>>> fccd2c6e754c27ec95ff23f169eb36c6b905f5f1
           fileIndex++;
         }
 
@@ -337,8 +368,14 @@ class _SouscriptionState extends State<Souscription> {
           var response = await request;
           print('Response PUT : $response');
           if (response.statusCode == 201) {
+<<<<<<< HEAD
             print(response.statusCode);
             await validerRequete(commit);
+=======
+            //Print de la reponse du PUT et envoie du commit
+            print(response.data['result']);
+            ValiderRequete(commit);
+>>>>>>> fccd2c6e754c27ec95ff23f169eb36c6b905f5f1
           } else {
             print('Le téléchargement de fichier a échoué');
           }

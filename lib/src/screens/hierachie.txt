@@ -1,0 +1,119 @@
+{
+    "params": {
+        "tag": "string",
+        "subscriber": {
+            "first_name": "string",
+            "last_name": "string",
+            "sex": "string",
+            "birth_date": "string",
+            "native_country": "number",
+            "birth_city": "string",
+            "email_adress": "string",
+            "mobile_phone": "string",
+            "country_of_residence": "number",
+            "town_of_residence": "string",
+            "street_of_residence": "string",
+            "income_level": "number",
+            "identification_number_type": "number",
+            "identification_number": "string"
+        },
+        "subscription": {
+            "compartment": "number",
+            "payment_type": "string",
+            "periodicity": "string",
+            "commitment_amount": "string",
+            "exit_choice": "string"
+        },
+        "attachments": [
+            {
+                "type": "string",
+                "etag": "string"
+            },
+            {
+                "type": "string",
+                "etag": "string"
+            },
+            {
+                "type": "string",
+                "etag": "string"
+            }
+        ]
+    }
+}
+
+//Anwser to firt POST
+//201: Created
+{
+    "jsonrpc": "2.0",
+    "id": null,
+    "result": {
+        "status": 201,
+        "success": true,
+        "message": "Created",
+        "data": {
+            "tag": "T001",
+            "expires_at": "2023-05-16 20:08:19",
+            "attachments": [
+                {
+                    "type": "identity-justification",
+                    "etag": "A001",
+                    "_links": {
+                        "upload": {
+                            "href": "/api/v1/subscription-transactions/36/attachments/identityjustification/A001"
+                        }
+                    }
+                },
+                {
+                    "type": "residence-justification",
+                    "etag": "A002",
+                    "_links": {
+                        "upload": {
+                            "href": "/api/v1/subscription-transactions/36/attachments/residencejustification/A002"
+                        }
+                    }
+                },
+                {
+                    "type": "expatriation-justification",
+                    "etag": "A003",
+                    "_links": {
+                        "upload": {
+                            "href": "/api/v1/subscription-transactions/36/attachments/expatriationjustification/A003"
+                        }
+                    }
+                }
+            ],
+            "_links": {
+                "commit": {
+                    "href": "/api/v1/subscription-transactions/36/commit"
+                },
+                "rollback": {
+                    "href": "/api/v1/subscription-transactions/36/rollback"
+                }
+            }
+        }
+    }
+}
+
+//Answer to PUT
+//Per file
+201: Created
+{
+    "result": {
+        "status": 201,
+        "success": true,
+        "message": "Created",
+        "data": {
+            "etag": "String"
+        }
+    }
+}
+//Answer to the second POST
+202: Accepted
+{
+    "result": {
+        "status": 202,
+        "success": true,
+        "message": "Accepted",
+        "data": null
+    }
+}
