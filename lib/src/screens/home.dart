@@ -1,6 +1,8 @@
 import 'package:cdc_ci_app/src/screens/comment_souscrire.dart';
 import 'package:cdc_ci_app/src/screens/login.dart';
+import 'package:cdc_ci_app/src/screens/pieces_justificatives.dart';
 import 'package:cdc_ci_app/src/screens/simulation_ligne.dart';
+import 'package:cdc_ci_app/src/screens/verifier_conditions.dart';
 import 'package:flutter/material.dart';
 
 import '../constants/images_strings.dart';
@@ -20,6 +22,7 @@ class Home extends StatelessWidget {
       appBar: AppBar(
         title: Text('Accueil'),
         centerTitle: true,
+        automaticallyImplyLeading: false,
         actions: [
           PopupMenuButton(
             itemBuilder: (context) => [
@@ -41,6 +44,14 @@ class Home extends StatelessWidget {
               ),
               PopupMenuItem<int>(
                 value: 4,
+                child: Text('Vérifier les conditions'),
+              ),
+              PopupMenuItem<int>(
+                value: 5,
+                child: Text('Pièces justificatives'),
+              ),
+              PopupMenuItem<int>(
+                value: 6,
                 child: Text('Nous contacter'),
               ),
             ],
@@ -75,6 +86,9 @@ class Home extends StatelessWidget {
               Image(
                 width: MediaQuery.of(context).size.width * 0.9,
                 image: AssetImage(descProduit),
+              ),
+              SizedBox(
+                height: 10,
               ),
               Column(
                 children: [
@@ -168,10 +182,10 @@ class Home extends StatelessWidget {
                 style: ElevatedButton.styleFrom(
                   shape: StadiumBorder(),
                   backgroundColor: Color(0xFFF28D31),
-                  padding: EdgeInsets.all(15),
-                  fixedSize: Size(250, 60),
+                  padding: EdgeInsets.all(8),
+                  fixedSize: Size(MediaQuery.of(context).size.width * 0.7, 60),
                   textStyle: TextStyle(
-                    fontSize: 20,
+                    fontSize: 16,
                     fontFamily: 'Quicksand',
                     fontWeight: FontWeight.bold,
                   ),
@@ -207,6 +221,12 @@ class Home extends StatelessWidget {
         print('Je dépose mon épargne');
         break;
       case 4:
+        Navigator.of(context).pushNamed(VerifierConditions.routeName);
+        break;
+      case 5:
+        Navigator.of(context).pushNamed(PiecesJustificatives.routeName);
+        break;
+      case 6:
         Navigator.of(context).pushNamed(ContactezNous.routeName);
         break;
     }

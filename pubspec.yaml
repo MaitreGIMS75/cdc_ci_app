@@ -107,6 +107,7 @@ flutter:
     - assets/images/pret_immo.png
     - assets/images/rente_viagere.png
     - assets/images/reversible.png
+    - assets/images/logo_drawer.png
   #   - images/a_dot_ham.jpeg
 
   # An image asset can refer to one or more resolution-specific "variants", see

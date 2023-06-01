@@ -1,10 +1,13 @@
 import 'package:cdc_ci_app/src/screens/conditions.dart';
+import 'package:cdc_ci_app/src/screens/pieces_justificatives.dart';
 import 'package:cdc_ci_app/src/screens/simulation_ligne.dart';
+import 'package:cdc_ci_app/src/screens/verifier_conditions.dart';
 
 import 'package:flutter/material.dart';
 import 'package:accordion/accordion.dart';
 import 'package:accordion/controllers.dart';
 
+import '../constants/images_strings.dart';
 import 'contactez_nous.dart';
 
 class Faq extends StatelessWidget {
@@ -70,7 +73,7 @@ class Faq extends StatelessWidget {
     return Scaffold(
       backgroundColor: Color(0xFFECF2FF),
       appBar: AppBar(
-        title: const Text('FAQ GÉNÉRALE'),
+        title: const Text('F.A.Q Générale'),
         centerTitle: true,
         actions: [
           PopupMenuButton(
@@ -93,6 +96,14 @@ class Faq extends StatelessWidget {
               ),
               PopupMenuItem<int>(
                 value: 4,
+                child: Text('Vérifier les conditions'),
+              ),
+              PopupMenuItem<int>(
+                value: 5,
+                child: Text('Pièces justificatives'),
+              ),
+              PopupMenuItem<int>(
+                value: 6,
                 child: Text('Nous contacter'),
               ),
             ],
@@ -100,292 +111,562 @@ class Faq extends StatelessWidget {
           ),
         ],
       ),
-      body: Accordion(
-        maxOpenSections: 2,
-        headerBackgroundColorOpened: Colors.black54,
-        scaleWhenAnimating: true,
-        openAndCloseAnimation: true,
-        headerPadding: const EdgeInsets.symmetric(vertical: 7, horizontal: 15),
-        sectionOpeningHapticFeedback: SectionHapticFeedback.heavy,
-        sectionClosingHapticFeedback: SectionHapticFeedback.light,
-        children: [
-          AccordionSection(
-            isOpen: true,
-            leftIcon: const Icon(Icons.insights_rounded, color: Colors.white),
-            headerBackgroundColor: Colors.black,
-            headerBackgroundColorOpened: const Color(0xffF28D31),
-            header:
-                Text('Qu\'est ce que Épargne Diaspora ?', style: _headerStyle),
-            content: Text(_question1, style: _contentStyle),
-            contentHorizontalPadding: 20,
-            contentBorderWidth: 1,
-            // onOpenSection: () => print('onOpenSection ...'),
-            // onCloseSection: () => print('onCloseSection ...'),
-          ),
-          AccordionSection(
-            isOpen: true,
-            leftIcon: const Icon(Icons.insights_rounded, color: Colors.white),
-            headerBackgroundColor: Colors.black,
-            headerBackgroundColorOpened: const Color(0xffF28D31),
-            header: Text(
-                'Le taux d\'intérêt du livret Épargne Diaspora peut il varier ?',
-                style: _headerStyle),
-            content: Text(_question2, style: _contentStyle),
-            contentHorizontalPadding: 20,
-            contentBorderWidth: 1,
-            // onOpenSection: () => print('onOpenSection ...'),
-            // onCloseSection: () => print('onCloseSection ...'),
-          ),
-          AccordionSection(
-            isOpen: true,
-            leftIcon: const Icon(Icons.insights_rounded, color: Colors.white),
-            headerBackgroundColor: Colors.black,
-            headerBackgroundColorOpened: const Color(0xffF28D31),
-            header: Text('Qui peut adhérer au produit CDC Épargne Diaspora ?',
-                style: _headerStyle),
-            content: Text(_question3, style: _contentStyle),
-            contentHorizontalPadding: 20,
-            contentBorderWidth: 1,
-            // onOpenSection: () => print('onOpenSection ...'),
-            // onCloseSection: () => print('onCloseSection ...'),
-          ),
-          AccordionSection(
-            isOpen: true,
-            leftIcon: const Icon(Icons.insights_rounded, color: Colors.white),
-            headerBackgroundColor: Colors.black,
-            headerBackgroundColorOpened: const Color(0xffF28D31),
-            header: Text(
-                'je souhaite me constituer une épargne; Pourquoi choisir CDC Épargne Diaspora ?',
-                style: _headerStyle),
-            content: Text(_question4, style: _contentStyle),
-            contentHorizontalPadding: 20,
-            contentBorderWidth: 1,
-            // onOpenSection: () => print('onOpenSection ...'),
-            // onCloseSection: () => print('onCloseSection ...'),
-          ),
-          AccordionSection(
-            isOpen: true,
-            leftIcon: const Icon(Icons.insights_rounded, color: Colors.white),
-            headerBackgroundColor: Colors.black,
-            headerBackgroundColorOpened: const Color(0xffF28D31),
-            header: Text(
-                'je souhaite préparer ma retraite; CDC Épargne Diaspora est-il le produit adapté ?',
-                style: _headerStyle),
-            content: Text(_question5, style: _contentStyle),
-            contentHorizontalPadding: 20,
-            contentBorderWidth: 1,
-            // onOpenSection: () => print('onOpenSection ...'),
-            // onCloseSection: () => print('onCloseSection ...'),
-          ),
-          AccordionSection(
-            isOpen: true,
-            leftIcon: const Icon(Icons.insights_rounded, color: Colors.white),
-            headerBackgroundColor: Colors.black,
-            headerBackgroundColorOpened: const Color(0xffF28D31),
-            header: Text(
-                'j\'aimerais acquérir un logement pour préparer mon retour en Côte d\'Ivoire : souscrire à CDC Épargne Diaspora pourra-t-il m\'aider?',
-                style: _headerStyle),
-            content: Text(_question6, style: _contentStyle),
-            contentHorizontalPadding: 20,
-            contentBorderWidth: 1,
-            // onOpenSection: () => print('onOpenSection ...'),
-            // onCloseSection: () => print('onCloseSection ...'),
-          ),
-          AccordionSection(
-            isOpen: true,
-            leftIcon: const Icon(Icons.insights_rounded, color: Colors.white),
-            headerBackgroundColor: Colors.black,
-            headerBackgroundColorOpened: const Color(0xffF28D31),
-            header: Text('Comment souscrire CDC Épargne Diaspora ?',
-                style: _headerStyle),
-            content: Text(_question7, style: _contentStyle),
-            contentHorizontalPadding: 20,
-            contentBorderWidth: 1,
-            // onOpenSection: () => print('onOpenSection ...'),
-            // onCloseSection: () => print('onCloseSection ...'),
-          ),
-          AccordionSection(
-            isOpen: true,
-            leftIcon: const Icon(Icons.insights_rounded, color: Colors.white),
-            headerBackgroundColor: Colors.black,
-            headerBackgroundColorOpened: const Color(0xffF28D31),
-            header: Text(
-                'Comment effectuer des versement sur CDC Épargne Diaspora ?',
-                style: _headerStyle),
-            content: Text(_question8, style: _contentStyle),
-            contentHorizontalPadding: 20,
-            contentBorderWidth: 1,
-            // onOpenSection: () => print('onOpenSection ...'),
-            // onCloseSection: () => print('onCloseSection ...'),
-          ),
-          AccordionSection(
-            isOpen: true,
-            leftIcon: const Icon(Icons.insights_rounded, color: Colors.white),
-            headerBackgroundColor: Colors.black,
-            headerBackgroundColorOpened: const Color(0xffF28D31),
-            header: Text(
+      body: SingleChildScrollView(
+        child: Padding(
+          padding: const EdgeInsets.all(20),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Image(
+                width: MediaQuery.of(context).size.width * 0.9,
+                image: AssetImage(logoHome),
+              ),
+              SizedBox(
+                height: 10,
+              ),
+              Text(
+                'CDC Épargne Diaspora : Une question? Ceci peut vous aider.',
+                style: TextStyle(
+                  //color: Color(0xff2E7742),
+                  fontSize: 16,
+                  fontFamily: 'Quicksand',
+                ),
+              ),
+              SizedBox(
+                height: 10,
+              ),
+              Center(
+                child: Text(
+                  'FAQ GÉNÉRALE',
+                  style: TextStyle(
+                    color: Color(0xFF2E7742),
+                    fontWeight: FontWeight.bold,
+                    fontSize: 24,
+                    fontFamily: 'Quicksand',
+                  ),
+                ),
+              ),
+              SizedBox(
+                height: 10,
+              ),
+              Center(
+                child: Text(
+                  'Questions fréquemment posées.',
+                  style: TextStyle(
+                    //color: Color(0xff2E7742),
+                    fontSize: 18,
+                    fontFamily: 'Quicksand',
+                  ),
+                ),
+              ),
+              SizedBox(
+                height: 30,
+              ),
+              Text(
+                'Qu\'est que CDC Épargne Diaspora',
+                style: TextStyle(
+                  color: Color(0xffF28D31),
+                  fontSize: 20,
+                  fontFamily: 'Quicksand',
+                ),
+              ),
+              SizedBox(
+                height: 20,
+              ),
+              Text(
+                _question1,
+                style: TextStyle(
+                  //color: Color(0xffF28D31),
+                  fontSize: 18,
+                  fontFamily: 'Quicksand',
+                ),
+              ),
+              SizedBox(
+                height: 20,
+              ),
+              Text(
+                'Le taux d\'intérêt du livret CDC Épargne Diaspora peut il varier ?',
+                style: TextStyle(
+                  color: Color(0xffF28D31),
+                  fontSize: 20,
+                  fontFamily: 'Quicksand',
+                ),
+              ),
+              SizedBox(
+                height: 20,
+              ),
+              Text(
+                _question2,
+                style: TextStyle(
+                  //color: Color(0xffF28D31),
+                  fontSize: 18,
+                  fontFamily: 'Quicksand',
+                ),
+              ),
+              SizedBox(
+                height: 20,
+              ),
+              Text(
+                'Qui peut adhérer au produit CDC Épargne Diaspora ?',
+                style: TextStyle(
+                  color: Color(0xffF28D31),
+                  fontSize: 20,
+                  fontFamily: 'Quicksand',
+                ),
+              ),
+              SizedBox(
+                height: 20,
+              ),
+              Text(
+                _question3,
+                style: TextStyle(
+                  //color: Color(0xffF28D31),
+                  fontSize: 18,
+                  fontFamily: 'Quicksand',
+                ),
+              ),
+              SizedBox(
+                height: 20,
+              ),
+              Text(
+                'Je souhaite me constituer une épargne; pourquoi choisir CDC Épargne Diaspora ?',
+                style: TextStyle(
+                  color: Color(0xffF28D31),
+                  fontSize: 20,
+                  fontFamily: 'Quicksand',
+                ),
+              ),
+              SizedBox(
+                height: 20,
+              ),
+              Text(
+                _question4,
+                style: TextStyle(
+                  //color: Color(0xffF28D31),
+                  fontSize: 18,
+                  fontFamily: 'Quicksand',
+                ),
+              ),
+              SizedBox(
+                height: 20,
+              ),
+              Text(
+                'Je souhaite préparer ma retraite, CDC Épargne Diaspora est-il un produit adapté ?',
+                style: TextStyle(
+                  color: Color(0xffF28D31),
+                  fontSize: 20,
+                  fontFamily: 'Quicksand',
+                ),
+              ),
+              SizedBox(
+                height: 20,
+              ),
+              Text(
+                _question5,
+                style: TextStyle(
+                  //color: Color(0xffF28D31),
+                  fontSize: 18,
+                  fontFamily: 'Quicksand',
+                ),
+              ),
+              SizedBox(
+                height: 20,
+              ),
+              Text(
+                'J\'aimerais acquérir un logement pour préparer mon retour en Côte d\'ivoire: souscrire à CDC Épargne Diaspora pourra-t-il m\'aider ?',
+                style: TextStyle(
+                  color: Color(0xffF28D31),
+                  fontSize: 20,
+                  fontFamily: 'Quicksand',
+                ),
+              ),
+              SizedBox(
+                height: 20,
+              ),
+              Text(
+                _question6,
+                style: TextStyle(
+                  //color: Color(0xffF28D31),
+                  fontSize: 18,
+                  fontFamily: 'Quicksand',
+                ),
+              ),
+              SizedBox(
+                height: 20,
+              ),
+              Text(
+                'Comment souscrire à CDC Épargne Diaspora ?',
+                style: TextStyle(
+                  color: Color(0xffF28D31),
+                  fontSize: 20,
+                  fontFamily: 'Quicksand',
+                ),
+              ),
+              SizedBox(
+                height: 20,
+              ),
+              Text(
+                _question7,
+                style: TextStyle(
+                  //color: Color(0xffF28D31),
+                  fontSize: 18,
+                  fontFamily: 'Quicksand',
+                ),
+              ),
+              SizedBox(
+                height: 20,
+              ),
+              Text(
+                'Comment effectuer des versements sur CDC Épargne Diaspora ?',
+                style: TextStyle(
+                  color: Color(0xffF28D31),
+                  fontSize: 20,
+                  fontFamily: 'Quicksand',
+                ),
+              ),
+              SizedBox(
+                height: 20,
+              ),
+              Text(
+                _question8,
+                style: TextStyle(
+                  //color: Color(0xffF28D31),
+                  fontSize: 18,
+                  fontFamily: 'Quicksand',
+                ),
+              ),
+              SizedBox(
+                height: 20,
+              ),
+              Text(
                 'Existe-t-il des frais lors des versements sur CDC Épargne Diaspora ?',
-                style: _headerStyle),
-            content: Text(_question9, style: _contentStyle),
-            contentHorizontalPadding: 20,
-            contentBorderWidth: 1,
-            // onOpenSection: () => print('onOpenSection ...'),
-            // onCloseSection: () => print('onCloseSection ...'),
-          ),
-          AccordionSection(
-            isOpen: true,
-            leftIcon: const Icon(Icons.insights_rounded, color: Colors.white),
-            headerBackgroundColor: Colors.black,
-            headerBackgroundColorOpened: const Color(0xffF28D31),
-            header: Text(
-                'Dans quelle devise mon épargne sur CDC Épargne Diaspora est elle gérée ?',
-                style: _headerStyle),
-            content: Text(_question10, style: _contentStyle),
-            contentHorizontalPadding: 20,
-            contentBorderWidth: 1,
-            // onOpenSection: () => print('onOpenSection ...'),
-            // onCloseSection: () => print('onCloseSection ...'),
-          ),
-          AccordionSection(
-            isOpen: true,
-            leftIcon: const Icon(Icons.insights_rounded, color: Colors.white),
-            headerBackgroundColor: Colors.black,
-            headerBackgroundColorOpened: const Color(0xffF28D31),
-            header: Text(
+                style: TextStyle(
+                  color: Color(0xffF28D31),
+                  fontSize: 20,
+                  fontFamily: 'Quicksand',
+                ),
+              ),
+              SizedBox(
+                height: 20,
+              ),
+              Text(
+                _question9,
+                style: TextStyle(
+                  //color: Color(0xffF28D31),
+                  fontSize: 18,
+                  fontFamily: 'Quicksand',
+                ),
+              ),
+              SizedBox(
+                height: 20,
+              ),
+              Text(
+                'Dans quelle dévise mon épargne sur CDC Épargne Diaspora est elle gérée ?',
+                style: TextStyle(
+                  color: Color(0xffF28D31),
+                  fontSize: 20,
+                  fontFamily: 'Quicksand',
+                ),
+              ),
+              SizedBox(
+                height: 20,
+              ),
+              Text(
+                _question10,
+                style: TextStyle(
+                  //color: Color(0xffF28D31),
+                  fontSize: 18,
+                  fontFamily: 'Quicksand',
+                ),
+              ),
+              SizedBox(
+                height: 20,
+              ),
+              Text(
                 'A quelle fréquence et quels montants verser sur le livret CDC Épargne Diaspora ?',
-                style: _headerStyle),
-            content: Text(_question11, style: _contentStyle),
-            contentHorizontalPadding: 20,
-            contentBorderWidth: 1,
-            // onOpenSection: () => print('onOpenSection ...'),
-            // onCloseSection: () => print('onCloseSection ...'),
-          ),
-          AccordionSection(
-            isOpen: true,
-            leftIcon: const Icon(Icons.insights_rounded, color: Colors.white),
-            headerBackgroundColor: Colors.black,
-            headerBackgroundColorOpened: const Color(0xffF28D31),
-            header: Text(
+                style: TextStyle(
+                  color: Color(0xffF28D31),
+                  fontSize: 20,
+                  fontFamily: 'Quicksand',
+                ),
+              ),
+              SizedBox(
+                height: 20,
+              ),
+              Text(
+                _question11,
+                style: TextStyle(
+                  //color: Color(0xffF28D31),
+                  fontSize: 18,
+                  fontFamily: 'Quicksand',
+                ),
+              ),
+              SizedBox(
+                height: 20,
+              ),
+              Text(
                 'Je suis intéressé par le livret CDC Épargne Diaspora mais je ne souhaite pas m\'engager pour les versements réguliers ?',
-                style: _headerStyle),
-            content: Text(_question12, style: _contentStyle),
-            contentHorizontalPadding: 20,
-            contentBorderWidth: 1,
-            // onOpenSection: () => print('onOpenSection ...'),
-            // onCloseSection: () => print('onCloseSection ...'),
-          ),
-          AccordionSection(
-            isOpen: true,
-            leftIcon: const Icon(Icons.insights_rounded, color: Colors.white),
-            headerBackgroundColor: Colors.black,
-            headerBackgroundColorOpened: const Color(0xffF28D31),
-            header: Text('Puis-je ouvrir pluisieurs CDC Épargne Diaspora ?',
-                style: _headerStyle),
-            content: Text(_question13, style: _contentStyle),
-            contentHorizontalPadding: 20,
-            contentBorderWidth: 1,
-            // onOpenSection: () => print('onOpenSection ...'),
-            // onCloseSection: () => print('onCloseSection ...'),
-          ),
-          AccordionSection(
-            isOpen: true,
-            leftIcon: const Icon(Icons.insights_rounded, color: Colors.white),
-            headerBackgroundColor: Colors.black,
-            headerBackgroundColorOpened: const Color(0xffF28D31),
-            header: Text(
+                style: TextStyle(
+                  color: Color(0xffF28D31),
+                  fontSize: 20,
+                  fontFamily: 'Quicksand',
+                ),
+              ),
+              SizedBox(
+                height: 20,
+              ),
+              Text(
+                _question12,
+                style: TextStyle(
+                  //color: Color(0xffF28D31),
+                  fontSize: 18,
+                  fontFamily: 'Quicksand',
+                ),
+              ),
+              SizedBox(
+                height: 20,
+              ),
+              Text(
+                'Puis-je ouvrir plusieurs livrets CDC Épargne Diaspora ?',
+                style: TextStyle(
+                  color: Color(0xffF28D31),
+                  fontSize: 20,
+                  fontFamily: 'Quicksand',
+                ),
+              ),
+              SizedBox(
+                height: 20,
+              ),
+              Text(
+                _question13,
+                style: TextStyle(
+                  //color: Color(0xffF28D31),
+                  fontSize: 18,
+                  fontFamily: 'Quicksand',
+                ),
+              ),
+              SizedBox(
+                height: 20,
+              ),
+              Text(
                 'Existe-t-il un plafond de versements sur le livret CDC Épargne Diaspora ?',
-                style: _headerStyle),
-            content: Text(_question14, style: _contentStyle),
-            contentHorizontalPadding: 20,
-            contentBorderWidth: 1,
-            // onOpenSection: () => print('onOpenSection ...'),
-            // onCloseSection: () => print('onCloseSection ...'),
-          ),
-          AccordionSection(
-            isOpen: true,
-            leftIcon: const Icon(Icons.insights_rounded, color: Colors.white),
-            headerBackgroundColor: Colors.black,
-            headerBackgroundColorOpened: const Color(0xffF28D31),
-            header: Text(
-                'Que ce passe t\'il si je ne respecte pas mes engagements de versements sur le livret CDC Épargne Diaspora ?',
-                style: _headerStyle),
-            content: Text(_question15, style: _contentStyle),
-            contentHorizontalPadding: 20,
-            contentBorderWidth: 1,
-            // onOpenSection: () => print('onOpenSection ...'),
-            // onCloseSection: () => print('onCloseSection ...'),
-          ),
-          AccordionSection(
-            isOpen: true,
-            leftIcon: const Icon(Icons.insights_rounded, color: Colors.white),
-            headerBackgroundColor: Colors.black,
-            headerBackgroundColorOpened: const Color(0xffF28D31),
-            header: Text(
-                'Je ne souhaite plus verser sur mon livret CDC Épargne Diaspora; puis-je récupérer mon épargne ?',
-                style: _headerStyle),
-            content: Text(_question16, style: _contentStyle),
-            contentHorizontalPadding: 20,
-            contentBorderWidth: 1,
-            // onOpenSection: () => print('onOpenSection ...'),
-            // onCloseSection: () => print('onCloseSection ...'),
-          ),
-          AccordionSection(
-            isOpen: true,
-            leftIcon: const Icon(Icons.insights_rounded, color: Colors.white),
-            headerBackgroundColor: Colors.black,
-            headerBackgroundColorOpened: const Color(0xffF28D31),
-            header: Text(
-                'Quel garanti de prévoyance sont accéssibles grâces au livret CDC Épargne Diaspora ?',
-                style: _headerStyle),
-            content: Text(_question17, style: _contentStyle),
-            contentHorizontalPadding: 20,
-            contentBorderWidth: 1,
-            // onOpenSection: () => print('onOpenSection ...'),
-            // onCloseSection: () => print('onCloseSection ...'),
-          ),
-          AccordionSection(
-            isOpen: true,
-            leftIcon: const Icon(Icons.insights_rounded, color: Colors.white),
-            headerBackgroundColor: Colors.black,
-            headerBackgroundColorOpened: const Color(0xffF28D31),
-            header: Text(
+                style: TextStyle(
+                  color: Color(0xffF28D31),
+                  fontSize: 20,
+                  fontFamily: 'Quicksand',
+                ),
+              ),
+              SizedBox(
+                height: 20,
+              ),
+              Text(
+                _question14,
+                style: TextStyle(
+                  //color: Color(0xffF28D31),
+                  fontSize: 18,
+                  fontFamily: 'Quicksand',
+                ),
+              ),
+              SizedBox(
+                height: 20,
+              ),
+              Text(
+                'Existe-t-il un plafond de versements sur le livret CDC Épargne Diaspora ?',
+                style: TextStyle(
+                  color: Color(0xffF28D31),
+                  fontSize: 20,
+                  fontFamily: 'Quicksand',
+                ),
+              ),
+              SizedBox(
+                height: 20,
+              ),
+              Text(
+                _question14,
+                style: TextStyle(
+                  //color: Color(0xffF28D31),
+                  fontSize: 18,
+                  fontFamily: 'Quicksand',
+                ),
+              ),
+              SizedBox(
+                height: 20,
+              ),
+              Text(
+                'Que se passe t il si je ne respecte pas mes engagements de versements sur le livret CDC Épargne Diaspora ?',
+                style: TextStyle(
+                  color: Color(0xffF28D31),
+                  fontSize: 20,
+                  fontFamily: 'Quicksand',
+                ),
+              ),
+              SizedBox(
+                height: 20,
+              ),
+              Text(
+                _question15,
+                style: TextStyle(
+                  //color: Color(0xffF28D31),
+                  fontSize: 18,
+                  fontFamily: 'Quicksand',
+                ),
+              ),
+              SizedBox(
+                height: 20,
+              ),
+              Text(
+                'Je ne souhaite plus verser sur mon livret CDC Épargne Diaspora ; puis-je récupérer mon épargne ?',
+                style: TextStyle(
+                  color: Color(0xffF28D31),
+                  fontSize: 20,
+                  fontFamily: 'Quicksand',
+                ),
+              ),
+              SizedBox(
+                height: 20,
+              ),
+              Text(
+                _question16,
+                style: TextStyle(
+                  //color: Color(0xffF28D31),
+                  fontSize: 18,
+                  fontFamily: 'Quicksand',
+                ),
+              ),
+              SizedBox(
+                height: 20,
+              ),
+              Text(
+                'Quelles garanties de prévoyance sont accessibles grâce au livret CDC Épargne Diaspora ?',
+                style: TextStyle(
+                  color: Color(0xffF28D31),
+                  fontSize: 20,
+                  fontFamily: 'Quicksand',
+                ),
+              ),
+              SizedBox(
+                height: 20,
+              ),
+              Text(
+                _question17,
+                style: TextStyle(
+                  //color: Color(0xffF28D31),
+                  fontSize: 18,
+                  fontFamily: 'Quicksand',
+                ),
+              ),
+              SizedBox(
+                height: 20,
+              ),
+              Text(
                 'Comment les cotisations des garanties de prévoyance, liées au livret CDC Épargne Diaspora sont elle payées ?',
-                style: _headerStyle),
-            content: Text(_question18, style: _contentStyle),
-            contentHorizontalPadding: 20,
-            contentBorderWidth: 1,
-            // onOpenSection: () => print('onOpenSection ...'),
-            // onCloseSection: () => print('onCloseSection ...'),
+                style: TextStyle(
+                  color: Color(0xffF28D31),
+                  fontSize: 20,
+                  fontFamily: 'Quicksand',
+                ),
+              ),
+              SizedBox(
+                height: 20,
+              ),
+              Text(
+                _question18,
+                style: TextStyle(
+                  //color: Color(0xffF28D31),
+                  fontSize: 18,
+                  fontFamily: 'Quicksand',
+                ),
+              ),
+              SizedBox(
+                height: 20,
+              ),
+              Text(
+                'Que deviennent les sommes à l\'issue de la période de blocage ?',
+                style: TextStyle(
+                  color: Color(0xffF28D31),
+                  fontSize: 20,
+                  fontFamily: 'Quicksand',
+                ),
+              ),
+              SizedBox(
+                height: 20,
+              ),
+              Text(
+                _question19,
+                style: TextStyle(
+                  //color: Color(0xffF28D31),
+                  fontSize: 18,
+                  fontFamily: 'Quicksand',
+                ),
+              ),
+              SizedBox(
+                height: 20,
+              ),
+              Text(
+                'Quelle est la fiscalité du livret CDC Épargne Diaspora ?',
+                style: TextStyle(
+                  color: Color(0xffF28D31),
+                  fontSize: 20,
+                  fontFamily: 'Quicksand',
+                ),
+              ),
+              SizedBox(
+                height: 20,
+              ),
+              Text(
+                _question20,
+                style: TextStyle(
+                  //color: Color(0xffF28D31),
+                  fontSize: 18,
+                  fontFamily: 'Quicksand',
+                ),
+              ),
+              SizedBox(
+                height: 20,
+              ),
+              Center(
+                child: Text(
+                  'Vous n\'avez pas trouvé la réponse à vos interrogations ?',
+                  style: TextStyle(
+                    //color: Color(0xFF2E7742),
+                    fontWeight: FontWeight.bold,
+                    fontSize: 18,
+                    fontFamily: 'Quicksand',
+                  ),
+                ),
+              ),
+              SizedBox(
+                height: 30,
+              ),
+              Center(
+                child: ElevatedButton(
+                  onPressed: () {},
+                  child: Text('Contactez-nous'),
+                  style: ElevatedButton.styleFrom(
+                    shape: StadiumBorder(),
+                    backgroundColor: Color(0xFFF28D31),
+                    padding: EdgeInsets.all(8),
+                    fixedSize:
+                        Size(MediaQuery.of(context).size.width * 0.7, 60),
+                    textStyle: TextStyle(
+                      fontSize: 16,
+                      fontFamily: 'Quicksand',
+                      fontWeight: FontWeight.bold,
+                    ),
+                    onPrimary: Colors.white,
+                    //elevation: 15,
+                    shadowColor: Color(
+                      0xFF2E7742,
+                    ),
+                  ),
+                ),
+              ),
+              SizedBox(
+                height: 30,
+              ),
+            ],
           ),
-          AccordionSection(
-            isOpen: true,
-            leftIcon: const Icon(Icons.insights_rounded, color: Colors.white),
-            headerBackgroundColor: Colors.black,
-            headerBackgroundColorOpened: const Color(0xffF28D31),
-            header: Text(
-                'Que deviennent les sommes à l\'issue de la période de blocage',
-                style: _headerStyle),
-            content: Text(_question19, style: _contentStyle),
-            contentHorizontalPadding: 20,
-            contentBorderWidth: 1,
-            // onOpenSection: () => print('onOpenSection ...'),
-            // onCloseSection: () => print('onCloseSection ...'),
-          ),
-          AccordionSection(
-            isOpen: true,
-            leftIcon: const Icon(Icons.insights_rounded, color: Colors.white),
-            headerBackgroundColor: Colors.black,
-            headerBackgroundColorOpened: const Color(0xffF28D31),
-            header: Text(
-                'Quelle est la fiscalité du livret CDC Épargne Diaspora',
-                style: _headerStyle),
-            content: Text(_question19, style: _contentStyle),
-            contentHorizontalPadding: 20,
-            contentBorderWidth: 1,
-            // onOpenSection: () => print('onOpenSection ...'),
-            // onCloseSection: () => print('onCloseSection ...'),
-          ),
-        ],
+        ),
       ),
     );
   }
@@ -405,6 +686,12 @@ class Faq extends StatelessWidget {
         print('Je dépose mon épargne');
         break;
       case 4:
+        Navigator.of(context).pushNamed(VerifierConditions.routeName);
+        break;
+      case 5:
+        Navigator.of(context).pushNamed(PiecesJustificatives.routeName);
+        break;
+      case 6:
         Navigator.of(context).pushNamed(ContactezNous.routeName);
         break;
     }

@@ -1,6 +1,8 @@
 import 'package:cdc_ci_app/src/screens/conditions.dart';
 import 'package:cdc_ci_app/src/screens/faq.dart';
+import 'package:cdc_ci_app/src/screens/pieces_justificatives.dart';
 import 'package:cdc_ci_app/src/screens/simulation_ligne.dart';
+import 'package:cdc_ci_app/src/screens/verifier_conditions.dart';
 
 import 'package:flutter/material.dart';
 import '../constants/images_strings.dart';
@@ -38,6 +40,14 @@ class ContactezNous extends StatelessWidget {
               ),
               PopupMenuItem<int>(
                 value: 4,
+                child: Text('Vérifier les conditions'),
+              ),
+              PopupMenuItem<int>(
+                value: 5,
+                child: Text('Pièces justificatives'),
+              ),
+              PopupMenuItem<int>(
+                value: 6,
                 child: Text('Nous contacter'),
               ),
             ],
@@ -49,411 +59,153 @@ class ContactezNous extends StatelessWidget {
         padding: const EdgeInsets.all(20),
         child: SingleChildScrollView(
           child: Center(
-            child:
-                Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
-              Image(
-                width: MediaQuery.of(context).size.width * 0.9,
-                image: AssetImage(logoHome),
-              ),
-              SizedBox(
-                height: 10,
-              ),
-              Text(
-                'CDC Épargne Diaspora : Vous souhaitez parler à un Conseiller ?',
-                style: TextStyle(
-                  //color: Color(0xff2E7742),
-                  fontSize: 16,
-                  fontFamily: 'Quicksand',
-                ),
-              ),
-              SizedBox(
-                height: 10,
-              ),
-              Text(
-                'Contactez-Nous',
-                style: TextStyle(
-                  color: Color(0xFF2E7742),
-                  fontWeight: FontWeight.bold,
-                  fontSize: 24,
-                  fontFamily: 'Quicksand',
-                ),
-              ),
-              SizedBox(
-                height: 10,
-              ),
-              Text(
-                'Simulation CDC Épargne Diaspora qu\'est-ce que c\'est ?',
-                style: TextStyle(
-                  color: Color(0xFF2E7742),
-                  fontWeight: FontWeight.bold,
-                  fontSize: 18,
-                  fontFamily: 'Quicksand',
-                ),
-              ),
-              SizedBox(
-                height: 10,
-              ),
-              Text(
-                'La simulation CDC Épargne Diaspora est un outil au format Excel qui vous permet d\'estimer et calculer votre épargne au terme de votre souscription.',
-                style: TextStyle(
-                  //color: Color(0xff2E7742),
-                  fontSize: 16,
-                  fontFamily: 'Quicksand',
-                ),
-              ),
-              SizedBox(
-                height: 10,
-              ),
-              Text(
-                'Le montant calculé de votre épargne au terme de votre souscription dépend :',
-                style: TextStyle(
-                  //color: Color(0xff2E7742),
-                  fontSize: 16,
-                  fontFamily: 'Quicksand',
-                ),
-              ),
-              SizedBox(
-                height: 10,
-              ),
-              Text(
-                'Du compartiment souscrit',
-                style: TextStyle(
-                  //color: Color(0xff2E7742),
-                  fontSize: 16,
-                  fontFamily: 'Quicksand',
-                  fontWeight: FontWeight.bold,
-                ),
-              ),
-              SizedBox(
-                height: 10,
-              ),
-              Text(
-                '- Compartiment 1 => 5 ans (60 mois) à 4% ;',
-                style: TextStyle(
-                  //color: Color(0xff2E7742),
-                  fontSize: 16,
-                  fontFamily: 'Quicksand',
-                ),
-              ),
-              Text(
-                '- Compartiment 2 => 10 ans (120 mois) à 4,5% ;',
-                style: TextStyle(
-                  //color: Color(0xff2E7742),
-                  fontSize: 16,
-                  fontFamily: 'Quicksand',
-                ),
-              ),
-              Text(
-                '- Compartiment 3 => 15 ans (180 mois) à 5% ;',
-                style: TextStyle(
-                  //color: Color(0xff2E7742),
-                  fontSize: 16,
-                  fontFamily: 'Quicksand',
-                ),
-              ),
-              SizedBox(
-                height: 10,
-              ),
-              Text(
-                'De l’option de sortie choisie :',
-                textAlign: TextAlign.left,
-                style: TextStyle(
-                  //color: Color(0xff2E7742),
-                  fontSize: 16,
-                  fontFamily: 'Quicksand',
-                  fontWeight: FontWeight.bold,
-                ),
-              ),
-              SizedBox(
-                height: 10,
-              ),
-              Text(
-                '- Capital bonifié des intérêts ;',
-                style: TextStyle(
-                  //color: Color(0xff2E7742),
-                  fontSize: 16,
-                  fontFamily: 'Quicksand',
-                ),
-              ),
-              Text(
-                '- Montant maximal d’un prêt immobilier après 5 ans de cotisation ;',
-                style: TextStyle(
-                  //color: Color(0xff2E7742),
-                  fontSize: 16,
-                  fontFamily: 'Quicksand',
-                ),
-              ),
-              Text(
-                '- Rente viagère :',
-                style: TextStyle(
-                  //color: Color(0xff2E7742),
-                  fontSize: 16,
-                  fontFamily: 'Quicksand',
-                ),
-              ),
-              SizedBox(
-                height: 5,
-              ),
-              Text(
-                '\t\t\t\t* Non réversible en tenant compte de l’âge de l’épargnant au terme du contrat ;',
-                style: TextStyle(
-                  //color: Color(0xff2E7742),
-                  fontSize: 16,
-                  fontFamily: 'Quicksand',
-                ),
-              ),
-              SizedBox(
-                height: 5,
-              ),
-              Text(
-                '\t\t\t\t* Réversible en tenant compte de l’âge de l’épargnant et de l’âge du conjoint au terme du contrat.',
-                style: TextStyle(
-                  //color: Color(0xff2E7742),
-                  fontSize: 16,
-                  fontFamily: 'Quicksand',
-                ),
-              ),
-              SizedBox(
-                height: 20,
-              ),
-              Text(
-                'Comment estimer mon épargne en ligne ?',
-                style: TextStyle(
-                  color: Color(0xFF2E7742),
-                  fontWeight: FontWeight.bold,
-                  fontSize: 18,
-                  fontFamily: 'Quicksand',
-                ),
-              ),
-              SizedBox(
-                height: 10,
-              ),
-              Text(
-                'Pour cela vous devez vous tourner vers le simulateur pour connaitre votre épargne à terme de votre livret CDC Épargne Diaspora.',
-                style: TextStyle(
-                  //color: Color(0xff2E7742),
-                  fontSize: 16,
-                  fontFamily: 'Quicksand',
-                ),
-              ),
-              SizedBox(
-                height: 10,
-              ),
-              Text(
-                'Pour simuler sa souscription CDC Épargne Diaspora et estimer son épargne, il est indispensable de tenir compte de certains éléments tels que :',
-                style: TextStyle(
-                  //color: Color(0xff2E7742),
-                  fontSize: 16,
-                  fontFamily: 'Quicksand',
-                ),
-              ),
-              SizedBox(
-                height: 10,
-              ),
-              Text(
-                'Étape 1 : Choisir votre compartiment',
-                style: TextStyle(
-                  //color: Color(0xff2E7742),
-                  fontSize: 16,
-                  fontFamily: 'Quicksand',
-                  fontWeight: FontWeight.bold,
-                ),
-              ),
-              SizedBox(
-                height: 20,
-              ),
-              Image(
-                width: MediaQuery.of(context).size.width * 0.9,
-                image: AssetImage(selectCompart),
-              ),
-              SizedBox(
-                height: 10,
-              ),
-              Text(
-                'Etape 2 : Sélectionner la périodicité de vos versements ainsi que votre montant minimum de versement selon votre périodicité choisie',
-                style: TextStyle(
-                  //color: Color(0xff2E7742),
-                  fontSize: 16,
-                  fontFamily: 'Quicksand',
-                  fontWeight: FontWeight.bold,
-                ),
-              ),
-              SizedBox(
-                height: 20,
-              ),
-              Image(
-                width: MediaQuery.of(context).size.width * 0.9,
-                image: AssetImage(selectPeriod),
-              ),
-              SizedBox(
-                height: 20,
-              ),
-              SizedBox(
-                height: 10,
-              ),
-              Text(
-                'Etape 3 : Vous obtenez en fin le montant de votre épargne en fonction de l’option de sortie choisie',
-                style: TextStyle(
-                  //color: Color(0xff2E7742),
-                  fontSize: 16,
-                  fontFamily: 'Quicksand',
-                  fontWeight: FontWeight.bold,
-                ),
-              ),
-              SizedBox(
-                height: 10,
-              ),
-              Text(
-                '\t\t\t\t - Capital bonifié des intérêts ',
-                style: TextStyle(
-                  //color: Color(0xff2E7742),
-                  fontSize: 16,
-                  fontFamily: 'Quicksand',
-                  fontWeight: FontWeight.bold,
-                ),
-              ),
-              SizedBox(
-                height: 20,
-              ),
-              Image(
-                width: MediaQuery.of(context).size.width * 0.9,
-                image: AssetImage(montantEpargne),
-              ),
-              SizedBox(
-                height: 20,
-              ),
-              Text(
-                '\t\t\t\t - Montant maximal d’un prêt immobilier après 5 ans de cotisation ;',
-                style: TextStyle(
-                  //color: Color(0xff2E7742),
-                  fontSize: 16,
-                  fontFamily: 'Quicksand',
-                  fontWeight: FontWeight.bold,
-                ),
-              ),
-              SizedBox(
-                height: 20,
-              ),
-              Image(
-                width: MediaQuery.of(context).size.width * 0.9,
-                image: AssetImage(pretImmo),
-              ),
-              SizedBox(
-                height: 10,
-              ),
-              Text(
-                '\t\t\t\t - Rente viagère ;',
-                style: TextStyle(
-                  //color: Color(0xff2E7742),
-                  fontSize: 16,
-                  fontFamily: 'Quicksand',
-                  fontWeight: FontWeight.bold,
-                ),
-              ),
-              SizedBox(
-                height: 10,
-              ),
-              Text(
-                '\t\t\t\t\t\t\t\t  - Non réversible en tenant compte de l’âge de l’épargnant au terme du contrat  ;',
-                style: TextStyle(
-                  //color: Color(0xff2E7742),
-                  fontSize: 16,
-                  fontFamily: 'Quicksand',
-                ),
-              ),
-              SizedBox(
-                height: 20,
-              ),
-              Image(
-                width: MediaQuery.of(context).size.width * 0.9,
-                image: AssetImage(renteViagere),
-              ),
-              SizedBox(
-                height: 20,
-              ),
-              Text(
-                '\t\t\t\t\t\t\t\t  - Réversible en tenant compte de l’âge de l’épargnant et de l’âge du conjoint au terme du contrat.',
-                style: TextStyle(
-                  //color: Color(0xff2E7742),
-                  fontSize: 16,
-                  fontFamily: 'Quicksand',
-                ),
-              ),
-              SizedBox(
-                height: 10,
-              ),
-              Image(
-                width: MediaQuery.of(context).size.width * 0.9,
-                image: AssetImage(renteViagere),
-              ),
-              SizedBox(
-                height: 30,
-              ),
-              Center(
-                child: OutlinedButton(
-                  onPressed: () {},
-                  child: Text('Téléchargez le simulateur'),
-                  style: ElevatedButton.styleFrom(
-                      backgroundColor: Color(0xFFECF2FF),
-                      padding: EdgeInsets.all(10),
-                      fixedSize: Size(300, 60),
-                      textStyle: TextStyle(
-                        fontSize: 20,
-                        fontFamily: 'Quicksand',
-                        fontWeight: FontWeight.bold,
-                      ),
-                      onPrimary: Color(0xFFF28D31),
-                      side: BorderSide(color: Color(0xFFF28D31), width: 2)
-                      // elevation: 15,
-                      ),
-                ),
-              ),
-              SizedBox(
-                height: 20,
-              ),
-              SizedBox(
-                height: 10,
-              ),
-              Center(
-                child: Text(
-                  'Vous avez besoin d\'aide ?',
-                  style: TextStyle(
-                    //color: Color(0xff2E7742),
-                    fontSize: 18,
-                    fontFamily: 'Quicksand',
-                    fontWeight: FontWeight.bold,
+            child: Column(
+                crossAxisAlignment: CrossAxisAlignment.center,
+                children: [
+                  Image(
+                    width: MediaQuery.of(context).size.width * 0.9,
+                    image: AssetImage(logoHome),
                   ),
-                ),
-              ),
-              SizedBox(
-                height: 20,
-              ),
-              Center(
-                child: ElevatedButton(
-                  onPressed: () {},
-                  child: Text('Contactez-nous'),
-                  style: ElevatedButton.styleFrom(
-                    shape: StadiumBorder(),
-                    backgroundColor: Color(0xFFF28D31),
-                    padding: EdgeInsets.all(15),
-                    fixedSize: Size(250, 60),
-                    textStyle: TextStyle(
-                      fontSize: 20,
+                  SizedBox(
+                    height: 10,
+                  ),
+                  Text(
+                    'CDC Épargne Diaspora : Vous souhaitez parler à un Conseiller ?',
+                    style: TextStyle(
+                      //color: Color(0xff2E7742),
+                      fontSize: 16,
+                      fontFamily: 'Quicksand',
+                    ),
+                  ),
+                  SizedBox(
+                    height: 10,
+                  ),
+                  Text(
+                    'Contactez-Nous',
+                    style: TextStyle(
+                      color: Color(0xFF2E7742),
+                      fontWeight: FontWeight.bold,
+                      fontSize: 24,
+                      fontFamily: 'Quicksand',
+                    ),
+                  ),
+                  SizedBox(
+                    height: 10,
+                  ),
+                  Text(
+                    'VOUS N\'ÊTES PAS ENCORE CLIENT ?',
+                    style: TextStyle(
+                      color: Color(0xFF2E7742),
+                      fontWeight: FontWeight.bold,
+                      fontSize: 18,
+                      fontFamily: 'Quicksand',
+                    ),
+                  ),
+                  SizedBox(
+                    height: 10,
+                  ),
+                  Text(
+                    'Votre compte est en cours d\'ouverture / Vous souhaitez ouvrir un compte ou vous informer sur notre produit ?',
+                    style: TextStyle(
+                      //color: Color(0xff2E7742),
+                      fontSize: 16,
                       fontFamily: 'Quicksand',
                       fontWeight: FontWeight.bold,
                     ),
-                    onPrimary: Colors.white,
-                    //elevation: 15,
-                    shadowColor: Color(
-                      0xFFF28D31,
+                  ),
+                  SizedBox(
+                    height: 10,
+                  ),
+                  Text(
+                    'Afin de répondre au mieux à vos questions, vous pouvez prendre contact directement avec notre Service Commercial :',
+                    style: TextStyle(
+                      //color: Color(0xff2E7742),
+                      fontSize: 16,
+                      fontFamily: 'Quicksand',
                     ),
                   ),
-                ),
-              ),
-              SizedBox(
-                height: 30,
-              ),
-            ]),
+                  SizedBox(
+                    height: 10,
+                  ),
+                  Text(
+                    'Nos experts dédiés sont disponibles du lundi au vendredi de 8h à 19h et le samedi de 9h à 13h.',
+                    style: TextStyle(
+                      //color: Color(0xff2E7742),
+                      fontSize: 16,
+                      fontFamily: 'Quicksand',
+                    ),
+                  ),
+                  SizedBox(
+                    height: 10,
+                  ),
+                  Text(
+                    'Vous pouvez nous laisser un message via le formulaire de réclamation.',
+                    style: TextStyle(
+                      //color: Color(0xff2E7742),
+                      fontSize: 16,
+                      fontFamily: 'Quicksand',
+                    ),
+                  ),
+                  SizedBox(
+                    height: 30,
+                  ),
+                  Center(
+                    child: OutlinedButton(
+                      onPressed: () {},
+                      child: Text('+ 225 27 22 55 92 05'),
+                      style: ElevatedButton.styleFrom(
+                          backgroundColor: Color(0xFFECF2FF),
+                          padding: EdgeInsets.all(10),
+                          fixedSize: Size(300, 60),
+                          textStyle: TextStyle(
+                            fontSize: 20,
+                            fontFamily: 'Quicksand',
+                            fontWeight: FontWeight.bold,
+                          ),
+                          onPrimary: Color(0xFFF28D31),
+                          side: BorderSide(color: Color(0xFFF28D31), width: 2)
+                          // elevation: 15,
+                          ),
+                    ),
+                  ),
+                  SizedBox(
+                    height: 20,
+                  ),
+                  Text(
+                    'VOUS ÊTES CLIENT ?',
+                    style: TextStyle(
+                      color: Color(0xFF2E7742),
+                      fontWeight: FontWeight.bold,
+                      fontSize: 18,
+                      fontFamily: 'Quicksand',
+                    ),
+                  ),
+                  SizedBox(
+                    height: 30,
+                  ),
+                  Text(
+                    'Rendez-vous sur votre espace sécurisé pour déposer votre réclamation dans la rubrique ouvrir un ticket.',
+                    style: TextStyle(
+                      //color: Color(0xff2E7742),
+                      fontSize: 16,
+                      fontFamily: 'Quicksand',
+                    ),
+                  ),
+                  SizedBox(
+                    height: 10,
+                  ),
+                  Text(
+                    'Vous offrir la meilleure qualité de service est au cœur de nos préoccupations',
+                    style: TextStyle(
+                      //color: Color(0xff2E7742),
+                      fontSize: 16,
+                      fontFamily: 'Quicksand',
+                    ),
+                  ),
+                  SizedBox(
+                    height: 30,
+                  ),
+                ]),
           ),
         ),
       ),
@@ -475,6 +227,12 @@ class ContactezNous extends StatelessWidget {
         print('Je dépose mon épargne');
         break;
       case 4:
+        Navigator.of(context).pushNamed(VerifierConditions.routeName);
+        break;
+      case 5:
+        Navigator.of(context).pushNamed(PiecesJustificatives.routeName);
+        break;
+      case 6:
         Navigator.of(context).pushNamed(ContactezNous.routeName);
         break;
     }

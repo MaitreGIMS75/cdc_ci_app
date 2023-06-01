@@ -1,8 +1,10 @@
 import 'package:cdc_ci_app/src/screens/conditions.dart';
 import 'package:cdc_ci_app/src/screens/faq.dart';
 import 'package:cdc_ci_app/src/screens/login.dart';
+import 'package:cdc_ci_app/src/screens/pieces_justificatives.dart';
 import 'package:cdc_ci_app/src/screens/simulation_ligne.dart';
 import 'package:cdc_ci_app/src/screens/souscription.dart';
+import 'package:cdc_ci_app/src/screens/verifier_conditions.dart';
 import 'package:flutter/material.dart';
 import '../constants/images_strings.dart';
 import 'contactez_nous.dart';
@@ -38,6 +40,14 @@ class CommentSouscrire extends StatelessWidget {
               ),
               PopupMenuItem<int>(
                 value: 4,
+                child: Text('Vérifier les conditions'),
+              ),
+              PopupMenuItem<int>(
+                value: 5,
+                child: Text('Pièces justificatives'),
+              ),
+              PopupMenuItem<int>(
+                value: 6,
                 child: Text('Nous contacter'),
               ),
             ],
@@ -236,7 +246,9 @@ class CommentSouscrire extends StatelessWidget {
                 height: 50,
               ),
               GestureDetector(
-                onTap: () {},
+                onTap: () {
+                  Navigator.of(context).pushNamed(VerifierConditions.routeName);
+                },
                 child: Text(
                   textAlign: TextAlign.center,
                   'Vérifier les conditions d\'éligibilité et du premier versement',
@@ -252,7 +264,10 @@ class CommentSouscrire extends StatelessWidget {
                 height: 10,
               ),
               GestureDetector(
-                onTap: () {},
+                onTap: () {
+                  Navigator.of(context)
+                      .pushNamed(PiecesJustificatives.routeName);
+                },
                 child: Text(
                   textAlign: TextAlign.center,
                   'Consulter la liste des pièces justificatives',
@@ -269,16 +284,16 @@ class CommentSouscrire extends StatelessWidget {
               ),
               ElevatedButton(
                 onPressed: () {
-                  Navigator.of(context).pushNamed(Souscription.routeName);
+                  Navigator.of(context).pushNamed(Login.routeName);
                 },
-                child: Text('Je souscrit au produit'),
+                child: Text('Je souscris au produit'),
                 style: ElevatedButton.styleFrom(
                   shape: StadiumBorder(),
                   backgroundColor: Color(0xFFF28D31),
-                  padding: EdgeInsets.all(15),
-                  fixedSize: Size(250, 60),
+                  padding: EdgeInsets.all(8),
+                  fixedSize: Size(MediaQuery.of(context).size.width * 0.7, 60),
                   textStyle: TextStyle(
-                    fontSize: 20,
+                    fontSize: 16,
                     fontFamily: 'Quicksand',
                     fontWeight: FontWeight.bold,
                   ),
@@ -294,16 +309,16 @@ class CommentSouscrire extends StatelessWidget {
               ),
               ElevatedButton(
                 onPressed: () {
-                  Navigator.of(context).pushNamed(Login.routeName);
+                  //Navigator.of(context).pushNamed(Login.routeName);
                 },
                 child: Text('Je suis déjà client'),
                 style: ElevatedButton.styleFrom(
                   shape: StadiumBorder(),
                   backgroundColor: Color(0xFFF28D31),
-                  padding: EdgeInsets.all(15),
-                  fixedSize: Size(250, 60),
+                  padding: EdgeInsets.all(8),
+                  fixedSize: Size(MediaQuery.of(context).size.width * 0.7, 60),
                   textStyle: TextStyle(
-                    fontSize: 20,
+                    fontSize: 16,
                     fontFamily: 'Quicksand',
                     fontWeight: FontWeight.bold,
                   ),
@@ -339,6 +354,12 @@ class CommentSouscrire extends StatelessWidget {
         print('Je dépose mon épargne');
         break;
       case 4:
+        Navigator.of(context).pushNamed(VerifierConditions.routeName);
+        break;
+      case 5:
+        Navigator.of(context).pushNamed(PiecesJustificatives.routeName);
+        break;
+      case 6:
         Navigator.of(context).pushNamed(ContactezNous.routeName);
         break;
     }

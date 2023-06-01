@@ -35,13 +35,13 @@ class _LoginState extends State<Login> {
     return Scaffold(
       backgroundColor: Color(0xFFECF2FF),
       appBar: AppBar(
-        leading: BackButton(),
-        title: Text('Login'),
+        //leading: BackButton(),
+        title: const Text('Connexion'),
         centerTitle: true,
       ),
       body: SafeArea(
         child: Container(
-          padding: EdgeInsets.all(20.0),
+          padding: EdgeInsets.all(30.0),
           child: ListView(
             children: [
               Image(
@@ -49,7 +49,7 @@ class _LoginState extends State<Login> {
                 image: AssetImage(logoHome),
               ),
               SizedBox(
-                height: 30,
+                height: 80,
               ),
               TextFormField(
                 controller: loginController,
@@ -75,7 +75,7 @@ class _LoginState extends State<Login> {
                     border: OutlineInputBorder()),
               ),
               SizedBox(
-                height: 50,
+                height: 100,
               ),
               ElevatedButton(
                 onPressed: () {
@@ -88,8 +88,8 @@ class _LoginState extends State<Login> {
                 style: ElevatedButton.styleFrom(
                   shape: StadiumBorder(),
                   backgroundColor: Color(0xFFF28D31),
-                  padding: EdgeInsets.all(20),
-                  fixedSize: Size(200, 60),
+                  padding: EdgeInsets.all(10),
+                  fixedSize: Size(120, 60),
                   textStyle: TextStyle(
                     fontSize: 20,
                     fontFamily: 'Quicksand',
@@ -105,7 +105,7 @@ class _LoginState extends State<Login> {
               SizedBox(
                 height: 50,
               ),
-              OutlinedButton(
+              /* OutlinedButton(
                 onPressed: () {
                   Navigator.of(context).pushNamed(Souscription.routeName);
                 },
@@ -123,7 +123,7 @@ class _LoginState extends State<Login> {
                     side: BorderSide(color: Color(0xFFF28D31), width: 2)
                     // elevation: 15,
                     ),
-              ),
+              ), */
             ],
           ),
         ),
@@ -163,14 +163,14 @@ class _LoginState extends State<Login> {
       } else {
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(
-            content: Text("Invalid Credentials"),
+            content: Text("Identifiants invalides"),
           ),
         );
       }
     } else {
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(
-          content: Text("Blank Field Not Allow"),
+          content: Text("Les champs vides ne sont pas autorisés"),
         ),
       );
     }

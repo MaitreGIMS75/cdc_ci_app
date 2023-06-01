@@ -1,8 +1,10 @@
+import 'package:cdc_ci_app/src/screens/dashboard.dart';
 import 'package:cdc_ci_app/src/screens/home.dart';
 import 'package:flutter/material.dart';
 
 import '../constants/images_strings.dart';
 import '/src/screens/login.dart';
+import 'inscription_reussie.dart';
 
 class SplashScreen extends StatefulWidget {
   const SplashScreen({super.key});
@@ -48,6 +50,6 @@ class _SplashScreenState extends State<SplashScreen> {
     });
     await Future.delayed(Duration(milliseconds: 10000));
     Navigator.pushReplacement(
-        context, MaterialPageRoute(builder: (context) => Login()));
+        context, MaterialPageRoute(builder: (context) => Dashboard()));
   }
 }

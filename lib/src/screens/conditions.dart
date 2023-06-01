@@ -1,4 +1,6 @@
+import 'package:cdc_ci_app/src/screens/pieces_justificatives.dart';
 import 'package:cdc_ci_app/src/screens/simulation_ligne.dart';
+import 'package:cdc_ci_app/src/screens/verifier_conditions.dart';
 import 'package:flutter/material.dart';
 
 import '../constants/images_strings.dart';
@@ -38,6 +40,14 @@ class Conditions extends StatelessWidget {
               ),
               PopupMenuItem<int>(
                 value: 4,
+                child: Text('Vérifier les conditions'),
+              ),
+              PopupMenuItem<int>(
+                value: 5,
+                child: Text('Pièces justificatives'),
+              ),
+              PopupMenuItem<int>(
+                value: 6,
                 child: Text('Nous contacter'),
               ),
             ],
@@ -1084,6 +1094,12 @@ class Conditions extends StatelessWidget {
         print('Je dépose mon épargne');
         break;
       case 4:
+        Navigator.of(context).pushNamed(VerifierConditions.routeName);
+        break;
+      case 5:
+        Navigator.of(context).pushNamed(PiecesJustificatives.routeName);
+        break;
+      case 6:
         Navigator.of(context).pushNamed(ContactezNous.routeName);
         break;
     }

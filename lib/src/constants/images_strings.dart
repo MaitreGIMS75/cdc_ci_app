@@ -19,3 +19,4 @@ const String montantEpargne = "assets/images/capital_boni.png";
 const String pretImmo = "assets/images/pret_immo.png";
 const String renteViagere = "assets/images/rente_viagere.png";
 const String reversible = "assets/images/reversible.png";
+const String logoDrawer = "assets/images/logo_drawer.png";

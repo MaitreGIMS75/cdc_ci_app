@@ -1,6 +1,6 @@
 import 'dart:convert';
-import 'dart:io';
 
+import 'package:cdc_ci_app/src/screens/inscription.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -9,6 +9,7 @@ import 'package:intl/intl.dart';
 import 'package:file_picker/file_picker.dart';
 import 'package:uuid/uuid.dart';
 
+import '../constants/images_strings.dart';
 import 'inscription_reussie.dart';
 
 class Souscription extends StatefulWidget {
@@ -21,12 +22,13 @@ class Souscription extends StatefulWidget {
 
 class _SouscriptionState extends State<Souscription> {
   List<dynamic> countries = [];
-  //int _value = 1;
   int? _valueCountrie;
 
   List<dynamic> cities = [];
   int? _valueCity;
+
   int? _valueCountryOfResidence;
+
   List<dynamic> incomes = [];
   int? _valueIncome;
 
@@ -62,6 +64,8 @@ class _SouscriptionState extends State<Souscription> {
   List<String?> _selectedFiles = [];
 
   String etag = "A00";
+
+  String? formattedDate;
 
   @override
   void initState() {
@@ -161,10 +165,10 @@ class _SouscriptionState extends State<Souscription> {
       var response = await request.send();
       if (response.statusCode == 201 && checkedfiles == true) {
         print('File uploaded successfully');
-        Navigator.push(
+        /* Navigator.push(
           context,
           MaterialPageRoute(builder: (context) => InscriptionReussie()),
-        );
+        ); */
       } else if (response.statusCode != 201) {
         print('Error uploading file');
       }
@@ -220,26 +224,28 @@ class _SouscriptionState extends State<Souscription> {
     return token;
   }
 
-  Future<void> ValiderRequete(var commit) async {
+  Future<void> validerRequete(var commit) async {
     String? token = await getToken();
     Map<String, String> headerSubmit = {
       'Authorization': 'Bearer $token',
     };
     String finalcommit = "http://154.73.102.36:8121${commit}";
-    var SubmissionRqt = await http.post(
-        Uri.parse('$finalcommit'),
-        headers: headerSubmit);
+    var SubmissionRqt =
+        await http.post(Uri.parse(finalcommit), headers: headerSubmit);
     if (SubmissionRqt.statusCode == 202) {
-      print('Submission body : ${json.decode(SubmissionRqt.body)['result']}');
+      /* print('Submission body : ${json.decode(SubmissionRqt.body)['result']}');
       Navigator.push(
         context,
         MaterialPageRoute(builder: (context) => InscriptionReussie()),
-      );
-    }else{
+      ); */
+      Navigator.of(context).pushReplacementNamed(InscriptionReussie.routeName);
+    } else {
       print('Submission body : ${json.decode(SubmissionRqt.body)['result']}');
       print('Erreur de soumission');
     }
   }
+
+// ...
 
   Future<void> CreerSouscription() async {
     String? token = await getToken();
@@ -269,7 +275,7 @@ class _SouscriptionState extends State<Souscription> {
                 "first_name": firstNameController.text,
                 "last_name": lastNameController.text,
                 "sex": "male",
-                "birth_date": dateInput.text,
+                "birth_date": "05-07-1985",
                 "native_country": _valueCountrie,
                 "birth_city": _valueCity,
                 "email_adress": emailAdressController.text,
@@ -303,8 +309,11 @@ class _SouscriptionState extends State<Souscription> {
       );
 
       final resultData = json.decode(response.body);
+
       if (resultData["result"]["status"] == 201) {
-        final commit = json.decode(response.body)['result']['data']['commit'];
+        final commit = resultData['result']['data']['_links']['commit']["href"];
+        print('Commit URL: $commit');
+
         print('Response Body: ${json.decode(response.body)}');
         print(resultData["result"]["data"]["attachments"]);
         final attachments =
@@ -317,44 +326,59 @@ class _SouscriptionState extends State<Souscription> {
                 filename: _selectedFiles[fileIndex]!),
           });
           uploadRequests.add(Dio().put(
-              'http://154.73.102.36:8121${element["url"]}',
-              data: formData,
-              options: Options(headers: requestHeaders)));
+            'http://154.73.102.36:8121${element["_links"]["upload"]["href"]}',
+            data: formData,
+            options: Options(headers: requestHeaders),
+          ));
           fileIndex++;
         }
 
         for (var request in uploadRequests) {
           var response = await request;
+          print('Response PUT : $response');
           if (response.statusCode == 201) {
-            print(response.data['result']);
-            ValiderRequete(commit);
+            print(response.statusCode);
+            await validerRequete(commit);
           } else {
-            print('Upload failed');
+            print('Le téléchargement de fichier a échoué');
           }
         }
 
-        Future.wait(uploadRequests)
-            .then((value) => ScaffoldMessenger.of(context).showSnackBar(
-                  SnackBar(
-                      duration: Duration(seconds: 5),
-                      content: Text("Succes souscription et fichiers")),
-                ));
-
+        Future.wait(uploadRequests).then(
+            (value) => ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+                  duration: Duration(seconds: 5),
+                  content: Text("Succes souscription et fichiers"),
+                )));
       } else {
-        ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(
-            content: Text("Invalid Informations"),
-          ),
-        );
+        ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+          content: Text("Informations invalides"),
+        ));
       }
     } else {
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(
-          content: Text("Blank Field Not Allow"),
-        ),
-      );
+      ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+        content: Text("Les champs vides ne sont pas autorisés"),
+      ));
     }
   }
+
+  /* Future<void> ValiderRequete(
+      String commit, Map<String, String> requestHeaders) async {
+    var response = await http.post(
+      Uri.parse(commit),
+      headers: requestHeaders,
+    );
+
+    if (response.statusCode == 202) {
+      try {
+        final resultData = json.decode(response.body);
+        print('Transaction validée');
+      } catch (e) {
+        print('Échec de l\'analyse de la réponse JSON');
+      }
+    } else {
+      print('Échec de la validation de la transaction');
+    }
+  } */
 
   @override
   Widget build(BuildContext context) {
@@ -367,23 +391,55 @@ class _SouscriptionState extends State<Souscription> {
         padding: EdgeInsets.all(20.0),
         child: ListView(
           children: [
+            Image(
+              width: MediaQuery.of(context).size.width * 0.9,
+              image: const AssetImage(logoHome),
+            ),
+            SizedBox(
+              height: 20,
+            ),
+            Center(
+              child: Text(
+                'Je souscrit au produit',
+                style: TextStyle(
+                  color: Color(0xFF2E7742),
+                  fontWeight: FontWeight.bold,
+                  fontSize: 24,
+                  fontFamily: 'Quicksand',
+                ),
+              ),
+            ),
+            SizedBox(
+              height: 20,
+            ),
+            Text(
+              'Souscrivez votre contrat CDC-CI épargne diaspora en moins de 10 minutes',
+              style: TextStyle(
+                //color: Color(0xff2E7742),
+                fontSize: 16,
+                fontFamily: 'Quicksand',
+              ),
+            ),
+            SizedBox(
+              height: 20,
+            ),
             const Center(
               child: Text(
-                'Informations of subscriber',
+                'Informations personnelles',
                 style: TextStyle(
                   color: Colors.black,
-                  fontWeight: FontWeight.bold,
+                  fontWeight: FontWeight.w500,
                   fontSize: 18,
                 ),
               ),
             ),
             const SizedBox(
-              height: 15,
+              height: 20,
             ),
             TextFormField(
               controller: firstNameController,
               decoration: const InputDecoration(
-                labelText: 'First Name',
+                labelText: 'Noms*',
                 prefixIcon: Icon(
                   Icons.verified_user_outlined,
                 ),
@@ -396,7 +452,7 @@ class _SouscriptionState extends State<Souscription> {
             TextFormField(
               controller: lastNameController,
               decoration: const InputDecoration(
-                labelText: 'Last Name',
+                labelText: 'Prénoms*',
                 prefixIcon: Icon(
                   Icons.verified_user_outlined,
                 ),
@@ -447,7 +503,7 @@ class _SouscriptionState extends State<Souscription> {
                   Icons.calendar_today,
                 ),
                 border: OutlineInputBorder(),
-                labelText: "Birth date",
+                labelText: "Date de naissance*",
               ),
               readOnly: true,
               onTap: () async {
@@ -459,11 +515,10 @@ class _SouscriptionState extends State<Souscription> {
                 );
                 if (pickedDate != null) {
                   print(pickedDate);
-                  String formattedDate =
-                      DateFormat('yyyy-MM-dd').format(pickedDate);
+                  formattedDate = DateFormat('yyyy-MM-dd').format(pickedDate);
                   print(formattedDate);
                   setState(() {
-                    dateInput.text = formattedDate;
+                    dateInput.text = formattedDate!;
                   });
                 } else {
                   print("Date not selected");
@@ -475,7 +530,7 @@ class _SouscriptionState extends State<Souscription> {
             ),
             DropdownButtonFormField(
               decoration: InputDecoration(
-                  labelText: "Native Country",
+                  labelText: "Pays de naissance*",
                   prefixIcon: Icon(
                     Icons.place,
                     color: Color(0xFFF28D31),
@@ -499,7 +554,7 @@ class _SouscriptionState extends State<Souscription> {
             ),
             DropdownButtonFormField(
               decoration: InputDecoration(
-                  labelText: "Birth city",
+                  labelText: "Lieu de naissance*",
                   prefixIcon: Icon(
                     Icons.place,
                     color: Color(0xFFF28D31),
@@ -525,7 +580,7 @@ class _SouscriptionState extends State<Souscription> {
               controller: emailAdressController,
               keyboardType: TextInputType.emailAddress,
               decoration: InputDecoration(
-                labelText: 'Email adress',
+                labelText: 'Adresse e-mail*',
                 prefixIcon: Icon(
                   Icons.verified_user_outlined,
                 ),
@@ -539,7 +594,7 @@ class _SouscriptionState extends State<Souscription> {
               controller: mobilePhoneController,
               keyboardType: TextInputType.number,
               decoration: InputDecoration(
-                labelText: 'Mobile Phone',
+                labelText: 'Numéro de téléphone mobile*',
                 prefixIcon: Icon(
                   Icons.verified_user_outlined,
                 ),
@@ -551,7 +606,7 @@ class _SouscriptionState extends State<Souscription> {
             ),
             DropdownButtonFormField(
               decoration: InputDecoration(
-                  labelText: "Country of residence",
+                  labelText: "Pays de residence*",
                   prefixIcon: Icon(
                     Icons.place,
                     color: Color(0xFFF28D31),
@@ -576,7 +631,7 @@ class _SouscriptionState extends State<Souscription> {
             TextFormField(
               controller: townOfResidenceController,
               decoration: InputDecoration(
-                labelText: 'Town of residence',
+                labelText: 'Ville de résidence*',
                 prefixIcon: Icon(
                   Icons.verified_user_outlined,
                 ),
@@ -589,7 +644,7 @@ class _SouscriptionState extends State<Souscription> {
             TextFormField(
               controller: streetOfResidenceController,
               decoration: InputDecoration(
-                labelText: 'Street of residence',
+                labelText: 'Rue de résidence*',
                 prefixIcon: Icon(
                   Icons.verified_user_outlined,
                 ),
@@ -601,7 +656,7 @@ class _SouscriptionState extends State<Souscription> {
             ),
             DropdownButtonFormField(
               decoration: InputDecoration(
-                  labelText: "Income Level",
+                  labelText: "Niveau de revenu*",
                   prefixIcon: Icon(
                     Icons.place,
                     color: Color(0xFFF28D31),
@@ -625,7 +680,7 @@ class _SouscriptionState extends State<Souscription> {
             ),
             DropdownButtonFormField(
               decoration: InputDecoration(
-                  labelText: "Identification number type",
+                  labelText: "Type de numéro d'identification unique*",
                   prefixIcon: Icon(
                     Icons.place,
                     color: Color(0xFFF28D31),
@@ -649,7 +704,7 @@ class _SouscriptionState extends State<Souscription> {
             ),
             Center(
               child: Text(
-                'Informations of Subscription',
+                'Données de souscription',
                 style: TextStyle(
                   color: Colors.black,
                   fontWeight: FontWeight.bold,
@@ -658,11 +713,11 @@ class _SouscriptionState extends State<Souscription> {
               ),
             ),
             SizedBox(
-              height: 15,
+              height: 20,
             ),
             DropdownButtonFormField(
               decoration: InputDecoration(
-                  labelText: "Compartment",
+                  labelText: "Compartiment à souscrire*",
                   prefixIcon: Icon(
                     Icons.place,
                     color: Color(0xFFF28D31),
@@ -678,6 +733,7 @@ class _SouscriptionState extends State<Souscription> {
               onChanged: (value) {
                 setState(() {
                   _valueCompartment = value as int;
+                  print(_valueCompartment);
                 });
               },
             ),
@@ -686,7 +742,7 @@ class _SouscriptionState extends State<Souscription> {
             ),
             DropdownButtonFormField(
               decoration: InputDecoration(
-                  labelText: "Payment type",
+                  labelText: "Type de versement*",
                   prefixIcon: Icon(
                     Icons.verified_user_outlined,
                     color: Color(0xFFF28D31),
@@ -712,7 +768,7 @@ class _SouscriptionState extends State<Souscription> {
             ),
             DropdownButtonFormField(
               decoration: InputDecoration(
-                  labelText: "Periodicity",
+                  labelText: "Périodicité*",
                   prefixIcon: Icon(
                     Icons.verified_user_outlined,
                     color: Color(0xFFF28D31),
@@ -740,7 +796,7 @@ class _SouscriptionState extends State<Souscription> {
               controller: commitmentAmountController,
               keyboardType: TextInputType.number,
               decoration: InputDecoration(
-                labelText: 'Commitment amount',
+                labelText: 'Engagement de versement*',
                 prefixIcon: Icon(
                   Icons.verified_user_outlined,
                 ),
@@ -752,7 +808,7 @@ class _SouscriptionState extends State<Souscription> {
             ),
             DropdownButtonFormField(
               decoration: InputDecoration(
-                  labelText: "Exit choice",
+                  labelText: "Intérêt pour les options en sortie*",
                   prefixIcon: Icon(
                     Icons.verified_user_outlined,
                     color: Color(0xFFF28D31),
@@ -783,7 +839,7 @@ class _SouscriptionState extends State<Souscription> {
                     builder: (context) => AlertDialog(
                           title: Text('A propos des fichiers'),
                           content: Text(
-                              "Les fichiers que vous nous soumettrez doivent être votre carte d'identité, votre justification de résidence et et votre justification d'expatriation dans cet ordre la."),
+                              "Les fichiers que vous nous soumettrez doivent être votre carte d'identité, votre justification de résidence et et votre justification d'expatriation dans cet ordre là."),
                           actions: [
                             TextButton(
                                 child: Text('ANNULER'),
@@ -809,7 +865,7 @@ class _SouscriptionState extends State<Souscription> {
                   fontWeight: FontWeight.bold,
                 ),
                 onPrimary: Colors.white,
-                elevation: 5,
+                elevation: 0,
               ),
             ),
             SizedBox(
@@ -825,8 +881,7 @@ class _SouscriptionState extends State<Souscription> {
                       context: context,
                       builder: (context) => AlertDialog(
                             title: Text('A propos des fichiers'),
-                            content:
-                                Text("Vous devez choisir trois fichiers !"),
+                            content: Text("Vous devez choisir 03 fichiers !"),
                             actions: [
                               TextButton(
                                   child: Text('ANNULER'),
@@ -841,7 +896,7 @@ class _SouscriptionState extends State<Souscription> {
                           ));
                 }
               },
-              child: Text('Continuez'),
+              child: Text('Validez'),
               style: ElevatedButton.styleFrom(
                 shape: StadiumBorder(),
                 backgroundColor: Color(0xFF2E7742),
@@ -853,8 +908,11 @@ class _SouscriptionState extends State<Souscription> {
                   fontWeight: FontWeight.bold,
                 ),
                 onPrimary: Colors.white,
-                elevation: 5,
+                elevation: 0,
               ),
+            ),
+            SizedBox(
+              height: 30,
             ),
           ],
         ),
