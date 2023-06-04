@@ -3,6 +3,7 @@ import 'dart:convert';
 import 'package:cdc_ci_app/src/screens/acceuil.dart';
 import 'package:cdc_ci_app/src/screens/conditions.dart';
 import 'package:cdc_ci_app/src/screens/connexion.dart';
+import 'package:cdc_ci_app/src/screens/dashboard.dart';
 import 'package:cdc_ci_app/src/screens/demande_versement.dart';
 import 'package:cdc_ci_app/src/screens/documents.dart';
 import 'package:cdc_ci_app/src/screens/eligible.dart';
@@ -158,7 +159,7 @@ class _LoginState extends State<Login> {
         //print('Login token : $token ');
         Navigator.push(
           context,
-          MaterialPageRoute(builder: (context) => Souscription()),
+          MaterialPageRoute(builder: (context) => Dashboard()),
         );
       } else {
         ScaffoldMessenger.of(context).showSnackBar(

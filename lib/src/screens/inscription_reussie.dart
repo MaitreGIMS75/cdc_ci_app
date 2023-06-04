@@ -1,3 +1,4 @@
+import 'package:cdc_ci_app/src/screens/dashboard.dart';
 import 'package:cdc_ci_app/src/screens/home.dart';
 import 'package:flutter/material.dart';
 
@@ -45,7 +46,10 @@ class InscriptionReussie extends StatelessWidget {
             ),
             ElevatedButton(
               onPressed: () {
-                Navigator.of(context).pushReplacementNamed(Home.routeName);
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(builder: (context) => Dashboard()),
+                );
               },
               child: Row(
                 children: [

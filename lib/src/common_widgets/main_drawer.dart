@@ -1,3 +1,7 @@
+import 'package:cdc_ci_app/src/screens/avenant.dart';
+import 'package:cdc_ci_app/src/screens/liste_souscriptions.dart';
+import 'package:cdc_ci_app/src/screens/souscription.dart';
+import 'package:cdc_ci_app/src/screens/souscription_epargnant.dart';
 import 'package:flutter/material.dart';
 
 import '../constants/images_strings.dart';
@@ -174,7 +178,9 @@ class MainDrawer extends StatelessWidget {
                           fontSize: 18,
                           fontWeight: FontWeight.w700),
                     ),
-                    onTap: () {},
+                    onTap: () {
+                      Navigator.of(context).pushReplacementNamed(Avenant.routeName);
+                    },
                   ),
                 ],
               ),
@@ -191,7 +197,9 @@ class MainDrawer extends StatelessWidget {
                           fontSize: 18,
                           fontWeight: FontWeight.w700),
                     ),
-                    onTap: () {},
+                    onTap: () {
+                      Navigator.of(context).pushReplacementNamed(ListeSouscription.routeName);
+                    },
                   ),
                   ListTile(
                     title: Text(
@@ -211,7 +219,9 @@ class MainDrawer extends StatelessWidget {
                           fontSize: 18,
                           fontWeight: FontWeight.w700),
                     ),
-                    onTap: () {},
+                    onTap: () {
+                      Navigator.of(context).pushReplacementNamed(SouscriptionEpargnant.routeName);
+                    },
                   ),
                 ],
               ),

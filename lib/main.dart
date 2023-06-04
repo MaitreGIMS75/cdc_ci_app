@@ -1,14 +1,18 @@
+import 'package:cdc_ci_app/src/screens/avenant.dart';
 import 'package:cdc_ci_app/src/screens/comment_souscrire.dart';
 import 'package:cdc_ci_app/src/screens/conditions.dart';
 import 'package:cdc_ci_app/src/screens/contactez_nous.dart';
+import 'package:cdc_ci_app/src/screens/dashboard.dart';
 import 'package:cdc_ci_app/src/screens/faq.dart';
 import 'package:cdc_ci_app/src/screens/home.dart';
 import 'package:cdc_ci_app/src/screens/inscription_reussie.dart';
+import 'package:cdc_ci_app/src/screens/liste_souscriptions.dart';
 import 'package:cdc_ci_app/src/screens/login.dart';
 import 'package:cdc_ci_app/src/screens/pieces_justificatives.dart';
 import 'package:cdc_ci_app/src/screens/simulation_ligne.dart';
 
 import 'package:cdc_ci_app/src/screens/souscription.dart';
+import 'package:cdc_ci_app/src/screens/souscription_epargnant.dart';
 import 'package:cdc_ci_app/src/screens/verifier_conditions.dart';
 import 'package:flutter/material.dart';
 
@@ -62,6 +66,9 @@ class MyApp extends StatelessWidget {
         VerifierConditions.routeName: (ctx) => const VerifierConditions(),
         PiecesJustificatives.routeName: (ctx) => const PiecesJustificatives(),
         InscriptionReussie.routeName: (ctx) => const InscriptionReussie(),
+        Avenant.routeName: (ctx) => const Avenant(),
+        SouscriptionEpargnant.routeName: (ctx) => const SouscriptionEpargnant(),
+        ListeSouscription.routeName: (ctx) => const ListeSouscription()
       },
     );
   }

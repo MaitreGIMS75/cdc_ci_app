@@ -207,7 +207,7 @@ class _SouscriptionState extends State<Souscription> {
 
   void _openFilePicker() async {
     final result = await FilePicker.platform.pickFiles(
-      type: FileType.any,
+      type: FileType.custom,
       allowMultiple: true,
       allowedExtensions: ['pdf', 'png', 'jpg', 'jpeg'],
     );
